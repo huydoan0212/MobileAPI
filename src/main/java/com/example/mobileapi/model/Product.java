@@ -32,7 +32,7 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<Cart> carts = new HashSet<>();
+    private Set<CartItem> cartItems;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();

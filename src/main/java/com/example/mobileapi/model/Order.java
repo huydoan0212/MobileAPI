@@ -29,14 +29,28 @@ public class Order {
 
     private LocalDateTime orderDate;
 
-    private Integer total_mount;
+    private double total_mount;
+
+    private String address;
+
+    private String numberPhone;
 
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
-
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        return id != null ? id.equals(order.id) : order.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }
