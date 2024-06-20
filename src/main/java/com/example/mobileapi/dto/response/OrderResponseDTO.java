@@ -14,7 +14,7 @@ public class OrderResponseDTO {
     private Integer id;
     private Integer customerId;
     private LocalDateTime orderDate;
-    private double totalAmount;
+    private Integer totalAmount;
     private String address;
     private String numberPhone;
     private String status;

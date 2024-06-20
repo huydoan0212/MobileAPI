@@ -29,7 +29,7 @@ public class Order {
 
     private LocalDateTime orderDate;
 
-    private double total_mount;
+    private Integer total_mount;
 
     private String address;
 

@@ -1,10 +1,8 @@
 package com.example.mobileapi.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 
 import java.util.Date;
@@ -17,29 +15,34 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, name = "id")
-    private Integer id;
+    Integer id;
+
+    @Column(nullable = false, name = "fullname")
+    String fullname;
 
     @Column(nullable = false, name = "username")
-    private String username;
+    String username;
 
     @Column(unique = true, length = 100, nullable = false, name = "email")
-    private String email;
+    String email;
 
     @Column(nullable = false, name = "password")
-    private String password;
+    String password;
 
     @Column(nullable = false, name = "number_phone")
-    private String phone;
+    String phone;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<Cart> carts = new HashSet<>();
+    Set<Cart> carts = new HashSet<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<Order> orders = new HashSet<>();
+    Set<Order> orders = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

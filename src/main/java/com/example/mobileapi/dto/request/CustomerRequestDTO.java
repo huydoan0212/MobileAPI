@@ -7,9 +7,12 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.io.Serializable;
+
 @Getter
 public class CustomerRequestDTO implements Serializable {
 
+    @NotNull(message = "Fullname không được để trống ")
+    private String fullname;
     @NotNull(message = "Username không được để trống ")
     private String username;
 
