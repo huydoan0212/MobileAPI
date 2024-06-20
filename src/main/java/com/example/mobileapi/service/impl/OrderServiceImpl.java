@@ -8,6 +8,7 @@ import com.example.mobileapi.model.Order;
 import com.example.mobileapi.model.OrderDetail;
 import com.example.mobileapi.repository.OrderRepository;
 import com.example.mobileapi.repository.CustomerRepository;
+import com.example.mobileapi.service.CustomerService;
 import com.example.mobileapi.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
+    private final CustomerServiceImpl customerService;
     private final ProductServiceImpl productService;
     @Override
     public int saveOrder(OrderRequestDTO orderRequestDTO) {
@@ -116,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
 
         return OrderResponseDTO.builder()
                 .id(order.getId())
-                .customerId(order.getCustomer().getId())
+                .customerDTO(customerService.getCustomer(order.getCustomer().getId()))
                 .orderDate(order.getOrderDate())
                 .totalAmount(order.getTotal_mount()) // Ensure this matches your field in OrderResponseDTO
                 .address(order.getAddress())
@@ -131,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
         return OrderDetailResponseDTO.builder()
                 .id(orderDetail.getId())
                 .orderId(orderDetail.getOrder().getId())
-                .productId(orderDetail.getProduct().getId())
+                .productResponseDTO(productService.getProductById(orderDetail.getProduct().getId()))
                 .quantity(orderDetail.getQuantity())
                 .build();
     }

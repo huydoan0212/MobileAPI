@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CustomerServiceImpl customerServiceImpl;
+    private final ProductServiceImpl productServiceImpl;
     @Override
     public int saveCart(CartRequestDTO cartRequestDTO) {
         Cart cart = Cart.builder()
@@ -54,7 +55,7 @@ public class CartServiceImpl implements CartService {
     private CartItemResponseDTO convertToCartItemResponseDTO(CartItem cartItem) {
         return CartItemResponseDTO.builder()
                 .id(cartItem.getId())
-                .productId(cartItem.getProduct().getId())
+                .productResponseDTO(productServiceImpl.getProductById(cartItem.getProduct().getId()))
                 .quantity(cartItem.getQuantity())
                 .build();
     }

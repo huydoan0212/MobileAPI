@@ -21,6 +21,9 @@ public class CustomerController {
 
     @PostMapping
     public int addCustomer(@RequestBody CustomerRequestDTO customer) {
+        if(customerService.checkUsername(customer.getUsername())) {
+            return -1;
+        }
         int userId = customerService.saveCustomer(customer);
         return userId;
     }
