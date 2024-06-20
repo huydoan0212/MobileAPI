@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 public class OrderResponseDTO {
     private Integer id;
-    private Integer customerId;
+    private CustomerResponseDTO customerDTO;
     private LocalDateTime orderDate;
     private double totalAmount;
     private String address;

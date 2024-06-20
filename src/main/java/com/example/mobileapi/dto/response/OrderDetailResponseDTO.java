@@ -10,6 +10,6 @@ import lombok.Getter;
 public class OrderDetailResponseDTO {
     private Integer id;
     private Integer orderId;
-    private Integer productId;
+    private ProductResponseDTO productResponseDTO;
     private Integer quantity;
 }
