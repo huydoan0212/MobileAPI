@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
+
     @Override
     public int saveCustomer(CustomerRequestDTO request) {
         Customer customer = Customer.builder().
@@ -49,11 +50,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseDTO getCustomer(int customerId) {
         Customer customer = getCustomerById(customerId);
-        if (customer == null) {return null;}
+        if (customer == null) {
+            return null;
+        }
         return CustomerResponseDTO.builder()
                 .username(customer.getUsername())
                 .phone(customer.getPhone())
                 .email(customer.getEmail())
+                .fullname(customer.getFullname())
                 .id(customer.getId())
                 .build();
     }
@@ -64,14 +68,15 @@ public class CustomerServiceImpl implements CustomerService {
         List<CustomerResponseDTO> customerResponseDTOS = new ArrayList<>();
         for (Customer customer : customers) {
             customerResponseDTOS.add(CustomerResponseDTO.builder()
-                            .username(customer.getUsername())
-                            .phone(customer.getPhone())
-                            .email(customer.getEmail())
-                            .id(customer.getId())
+                    .username(customer.getUsername())
+                    .phone(customer.getPhone())
+                    .email(customer.getEmail())
+                    .id(customer.getId())
                     .build());
         }
         return customerResponseDTOS;
     }
+
     @Override
     public boolean checkUsername(String username) {
         System.out.println(customerRepository.existsByUsername(username));

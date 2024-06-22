@@ -14,9 +14,10 @@ public class OrderResponseDTO {
     private Integer id;
     private CustomerResponseDTO customerDTO;
     private LocalDateTime orderDate;
-    private double totalAmount;
+    private Integer totalAmount;
     private String address;
     private String numberPhone;
     private String status;
+    private String receiver;
     private Set<OrderDetailResponseDTO> orderDetails;
 }

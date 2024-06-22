@@ -10,6 +10,8 @@ import lombok.Getter;
 public class CustomerResponseDTO {
     private int id;
 
+    private String fullname;
+
     private String username;
 
     private String email;
