@@ -1,5 +1,6 @@
 package com.example.mobileapi.controller;
 
+import com.example.mobileapi.dto.request.OrderEditRequestDTO;
 import com.example.mobileapi.dto.request.OrderRequestDTO;
 import com.example.mobileapi.dto.response.OrderResponseDTO;
 import com.example.mobileapi.service.OrderService;
@@ -13,16 +14,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+
     @PostMapping
-    public int saveOrder(@RequestBody OrderRequestDTO orderRequestDTO){
+    public int saveOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
         return orderService.saveOrder(orderRequestDTO);
     }
+
+    @PutMapping("/order/{orderId}")
+    public void editOrder(@RequestBody OrderEditRequestDTO orderRequestDTO, @PathVariable("orderId") int orderId) {
+        orderService.editOrder(orderId, orderRequestDTO);
+    }
+
     @GetMapping("/customer/{customerId}")
-    public List<OrderResponseDTO> getOrderByCustomerId(@PathVariable int customerId){
+    public List<OrderResponseDTO> getOrderByCustomerId(@PathVariable int customerId) {
         return orderService.getOrderByCustomerId(customerId);
     }
+
     @GetMapping("/list")
-    public List<OrderResponseDTO> getAllOrders(){
+    public List<OrderResponseDTO> getAllOrders() {
         return orderService.getAllOrders();
     }
 }

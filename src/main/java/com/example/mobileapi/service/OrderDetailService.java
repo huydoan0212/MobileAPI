@@ -1,19 +1,22 @@
 package com.example.mobileapi.service;
 
 import com.example.mobileapi.dto.request.OrderDetailRequestDTO;
+import com.example.mobileapi.dto.request.OrderDetailSaveRequest;
 import com.example.mobileapi.dto.response.OrderDetailResponseDTO;
 import com.example.mobileapi.model.OrderDetail;
 
-public interface OrderDetailService {
-    OrderDetailResponseDTO saveOrderDetail(OrderDetailRequestDTO requestDTO);
+import java.util.List;
 
-    OrderDetailResponseDTO updateOrderDetail(int id, OrderDetailRequestDTO requestDTO);
+public interface OrderDetailService {
+    OrderDetailResponseDTO saveOrderDetail(OrderDetailSaveRequest requestDTO);
+
+    OrderDetailResponseDTO updateOrderDetail(int id, OrderDetailSaveRequest requestDTO);
 
     void deleteOrderDetail(int id);
 
     OrderDetailResponseDTO findOrderDetailById(int id);
 
-    OrderDetailResponseDTO findOrderDetailByOrderId(int orderId);
+    List<OrderDetailResponseDTO> findOrderDetailByOrderId(int orderId);
 
     OrderDetailResponseDTO findOrderDetailByProductId(int productId);
 

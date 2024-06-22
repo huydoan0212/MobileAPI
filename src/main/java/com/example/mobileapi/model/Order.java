@@ -28,17 +28,17 @@ public class Order {
     private Customer customer;
 
     private LocalDateTime orderDate;
-
-    private Integer total_mount;
-
+    private Integer totalAmount;
     private String address;
-
     private String numberPhone;
-
     private String status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();
+
+
+    private String receiver;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

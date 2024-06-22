@@ -1,11 +1,14 @@
 package com.example.mobileapi.controller;
 
 import com.example.mobileapi.dto.request.OrderDetailRequestDTO;
+import com.example.mobileapi.dto.request.OrderDetailSaveRequest;
 import com.example.mobileapi.dto.response.OrderDetailResponseDTO;
 import com.example.mobileapi.service.OrderDetailService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/order-detail")
@@ -14,12 +17,12 @@ public class OrderDetailController {
     private final OrderDetailService orderDetailService;
 
     @PostMapping
-    public OrderDetailResponseDTO saveOrderDetail(OrderDetailRequestDTO orderDetailRequestDTO) {
+    public OrderDetailResponseDTO saveOrderDetail(OrderDetailSaveRequest orderDetailRequestDTO) {
         return orderDetailService.saveOrderDetail(orderDetailRequestDTO);
     }
 
     @PutMapping("/{id}")
-    public OrderDetailResponseDTO updateOrderDetail(@PathVariable int id, OrderDetailRequestDTO orderDetailRequestDTO) {
+    public OrderDetailResponseDTO updateOrderDetail(@PathVariable int id, OrderDetailSaveRequest orderDetailRequestDTO) {
         return orderDetailService.updateOrderDetail(id, orderDetailRequestDTO);
     }
 
@@ -34,7 +37,7 @@ public class OrderDetailController {
     }
 
     @GetMapping("/orderId/{orderId}")
-    public OrderDetailResponseDTO getOrderDetailByOrderId(@PathVariable int orderId) {
+    public List<OrderDetailResponseDTO> getOrderDetailByOrderId(@PathVariable int orderId) {
         return orderDetailService.findOrderDetailByOrderId(orderId);
     }
 
