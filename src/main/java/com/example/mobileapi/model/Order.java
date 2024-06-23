@@ -28,7 +28,9 @@ public class Order {
     private Customer customer;
 
     private LocalDateTime orderDate;
-    private Integer totalAmount;
+    @Column(name = "total_mount", nullable = false)
+    private Integer totalAmount; // Đảm bảo rằng tên trường này trùng khớp với tên trong cơ sở dữ liệu
+
     private String address;
     private String numberPhone;
     private String status;

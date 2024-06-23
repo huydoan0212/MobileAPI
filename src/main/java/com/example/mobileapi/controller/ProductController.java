@@ -34,5 +34,8 @@ public class ProductController {
     public List<ProductResponseDTO> getProducts() {
         return productService.getAllProducts();
     }
-
+    @GetMapping("/search")
+    public List<ProductResponseDTO> getProductByName(@RequestParam String name) {
+        return productService.getProductByName(name);
+    }
 }
