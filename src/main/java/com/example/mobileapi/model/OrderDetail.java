@@ -26,6 +26,7 @@ public class OrderDetail {
     private Product product;
 
     private Integer quantity;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,5 +1,6 @@
 package com.example.mobileapi.service.impl;
 
+import com.example.mobileapi.dto.request.OrderEditRequestDTO;
 import com.example.mobileapi.dto.request.OrderRequestDTO;
 import com.example.mobileapi.dto.request.OrderDetailRequestDTO;
 import com.example.mobileapi.dto.response.OrderResponseDTO;
@@ -37,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = Order.builder()
                 .customer(customerRepository.findById(orderRequestDTO.getCustomerId()).orElse(null))
                 .orderDate(LocalDateTime.now())
-                .total_mount(orderRequestDTO.getTotalAmount())
+                .totalAmount(orderRequestDTO.getTotalAmount())
                 .address(orderRequestDTO.getAddress())
                 .numberPhone(orderRequestDTO.getNumberPhone())
                 .status(orderRequestDTO.getStatus())
@@ -70,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrder(int id, OrderRequestDTO orderRequestDTO) {
         Order order = getOrderById(id);
         if (order != null) {
-            order.setTotal_mount(orderRequestDTO.getTotalAmount());
+            order.setTotalAmount(orderRequestDTO.getTotalAmount());
             order.setAddress(orderRequestDTO.getAddress());
             order.setNumberPhone(orderRequestDTO.getNumberPhone());
             order.setStatus(orderRequestDTO.getStatus());
@@ -99,6 +100,11 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void editOrder(int id, OrderEditRequestDTO orderEditRequestDTO) {
+
+    }
+
     public List<OrderResponseDTO> getOrdersByCustomerId(int customerId) {
         List<Order> orders = orderRepository.findByCustomerId(customerId);
         if (orders.isEmpty()) {
@@ -123,7 +129,7 @@ public class OrderServiceImpl implements OrderService {
                 .id(order.getId())
                 .customerDTO(customerService.getCustomer(order.getCustomer().getId()))
                 .orderDate(order.getOrderDate())
-                .totalAmount(order.getTotal_mount()) // Ensure this matches your field in OrderResponseDTO
+                .totalAmount(order.getTotalAmount()) // Ensure this matches your field in OrderResponseDTO
                 .address(order.getAddress())
                 .numberPhone(order.getNumberPhone())
                 .status(order.getStatus())

@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 public class OrderRequestDTO {
     private Integer customerId;
-    private double totalAmount;
+    private Integer totalAmount;
     private String address;
     private String numberPhone;
     private String status;
