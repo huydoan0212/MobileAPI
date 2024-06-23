@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 @Table(name = "customers")
@@ -33,12 +34,16 @@ public class Customer {
 
     @Column(nullable = false, name = "password")
     String password;
-
+    @Column(nullable = false)
+    private String detail;
     @Column(nullable = false, name = "number_phone")
     String phone;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     Set<Cart> carts = new HashSet<>();
+
+    @Column(name = "reset_code")
+    String resetCode;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     Set<Order> orders = new HashSet<>();
@@ -57,5 +62,10 @@ public class Customer {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+
+
+
+
 }
 
