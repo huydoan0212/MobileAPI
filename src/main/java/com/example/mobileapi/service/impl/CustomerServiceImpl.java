@@ -22,6 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public int saveCustomer(CustomerRequestDTO request) {
         Customer customer = Customer.builder().
+                fullname(request.getFullname()).
                 username(request.getUsername()).
                 password(request.getPassword()).
                 email(request.getEmail()).
@@ -34,6 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void updateCustomer(int customerId, CustomerRequestDTO request) {
         Customer customer = getCustomerById(customerId);
+        customer.setFullname(request.getFullname());
         customer.setUsername(request.getUsername());
         customer.setPassword(request.getPassword());
         customer.setEmail(request.getEmail());
@@ -59,6 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .email(customer.getEmail())
                 .fullname(customer.getFullname())
                 .id(customer.getId())
+                .role(customer.isRole())
                 .build();
     }
 
@@ -68,10 +71,12 @@ public class CustomerServiceImpl implements CustomerService {
         List<CustomerResponseDTO> customerResponseDTOS = new ArrayList<>();
         for (Customer customer : customers) {
             customerResponseDTOS.add(CustomerResponseDTO.builder()
+                            .fullname(customer.getFullname())
                     .username(customer.getUsername())
                     .phone(customer.getPhone())
                     .email(customer.getEmail())
                     .id(customer.getId())
+                            .role(customer.isRole())
                     .build());
         }
         return customerResponseDTOS;
@@ -87,10 +92,12 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponseDTO login(String username, String password) {
         Customer customer = customerRepository.login(username, password);
         return CustomerResponseDTO.builder()
+                .fullname(customer.getFullname())
                 .username(customer.getUsername())
                 .email(customer.getEmail())
                 .phone(customer.getPhone())
                 .id(customer.getId())
+                .role(customer.isRole())
                 .build();
 
     }

@@ -34,7 +34,8 @@ public class Customer {
 
     @Column(nullable = false, name = "number_phone")
     String phone;
-
+    // 0-customer, 1-admin
+    boolean role;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     List<Cart> carts = new ArrayList<>();
 
