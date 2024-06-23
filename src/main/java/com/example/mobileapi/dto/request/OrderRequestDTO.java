@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -16,6 +17,6 @@ public class OrderRequestDTO {
     private String address;
     private String numberPhone;
     private String status;
-    private Set<OrderDetailRequestDTO> orderDetails;
+    private List<OrderDetailRequestDTO> orderDetails;
 }
 

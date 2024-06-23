@@ -21,12 +21,27 @@ public class CartItemServiceImpl implements CartItemService {
     private final ProductServiceImpl productServiceImpl;
     @Override
     public int saveCartItem(CartItemRequestDTO cartItem) {
-        CartItem cartIt = CartItem.builder()
-                .cart(cartServiceImpl.getByCartId(cartItem.getCartId()))
-                .quantity(cartItem.getQuantity())
-                .product(productServiceImpl.getById(cartItem.getProductId()))
-                .build();
-        return cartItemRepository.save(cartIt).getId();
+        // Lấy thông tin giỏ hàng và sản phẩm từ các dịch vụ tương ứng
+        int cartId = cartItem.getCartId();
+        int productId = cartItem.getProductId();
+
+        // Tìm CartItem dựa trên cartId và productId
+        CartItem existingCartItem = cartItemRepository.findByCartIdAndProductId(cartId, productId);
+
+        if (existingCartItem != null) {
+            // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng sản phẩm
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItem.getQuantity());
+            cartItemRepository.save(existingCartItem);
+            return existingCartItem.getId();
+        } else {
+            // Nếu sản phẩm chưa tồn tại trong giỏ hàng, tạo mới CartItem
+            CartItem newCartItem = CartItem.builder()
+                    .cart(cartServiceImpl.getByCartId(cartId))
+                    .quantity(cartItem.getQuantity())
+                    .product(productServiceImpl.getById(productId))
+                    .build();
+            return cartItemRepository.save(newCartItem).getId();
+        }
     }
 
     @Override
@@ -50,6 +65,20 @@ public class CartItemServiceImpl implements CartItemService {
         cartI.setQuantity(cartItem.getQuantity());
         cartItemRepository.save(cartI);
     }
+
+    @Override
+    public void updateCartItemQuantity(int cartItemId, int quantity) {
+        CartItem cartI = getByCartId(cartItemId);
+        cartI.setQuantity(cartI.getQuantity() + quantity);
+        if(cartI.getQuantity() <= 0) {
+            cartItemRepository.delete(cartI);
+        }else {
+            cartItemRepository.save(cartI);
+        }
+
+
+    }
+
     public CartItem getByCartId(int cartItemId) {
         return cartItemRepository.findById(cartItemId).orElse(null);
     }

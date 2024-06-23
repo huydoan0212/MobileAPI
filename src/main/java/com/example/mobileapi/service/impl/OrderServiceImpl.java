@@ -6,6 +6,7 @@ import com.example.mobileapi.dto.response.OrderResponseDTO;
 import com.example.mobileapi.dto.response.OrderDetailResponseDTO;
 import com.example.mobileapi.model.Order;
 import com.example.mobileapi.model.OrderDetail;
+import com.example.mobileapi.repository.OrderDetailRepository;
 import com.example.mobileapi.repository.OrderRepository;
 import com.example.mobileapi.repository.CustomerRepository;
 import com.example.mobileapi.service.CustomerService;
@@ -29,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerRepository customerRepository;
     private final CustomerServiceImpl customerService;
     private final ProductServiceImpl productService;
+    private final ProductServiceImpl productServiceImpl;
+    private final OrderDetailRepository orderDetailRepository;
     @Override
     public int saveOrder(OrderRequestDTO orderRequestDTO) {
         Order order = Order.builder()
@@ -40,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
                 .status(orderRequestDTO.getStatus())
                 .orderDetails(orderRequestDTO.getOrderDetails().stream()
                         .map(this::convertToOrderDetailEntity)
-                        .collect(Collectors.toSet()))
+                        .collect(Collectors.toList()))
                 .build();
 
         order.getOrderDetails().forEach(orderDetail -> orderDetail.setOrder(order));
@@ -73,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus(orderRequestDTO.getStatus());
             order.setOrderDetails(orderRequestDTO.getOrderDetails().stream()
                     .map(this::convertToOrderDetailEntity)
-                    .collect(Collectors.toSet()));
+                    .collect(Collectors.toList()));
             order.getOrderDetails().forEach(orderDetail -> orderDetail.setOrder(order));
             orderRepository.save(order);
         }
@@ -112,9 +115,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderResponseDTO convertToOrderResponseDTO(Order order) {
-        Set<OrderDetailResponseDTO> orderDetailDTOs = order.getOrderDetails().stream()
+        List<OrderDetailResponseDTO> orderDetailDTOs = order.getOrderDetails().stream()
                 .map(this::convertToOrderDetailResponseDTO)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         return OrderResponseDTO.builder()
                 .id(order.getId())

@@ -1,10 +1,7 @@
 package com.example.mobileapi.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Table(name = "order-details")
 @Entity
@@ -12,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Getter
+@Setter
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

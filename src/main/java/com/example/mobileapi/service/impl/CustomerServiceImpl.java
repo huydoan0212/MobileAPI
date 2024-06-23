@@ -90,6 +90,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     }
 
+    @Override
+    public void updateCustomerByAdmin(int customerId, CustomerResponseDTO request) {
+        Customer customer = getCustomerById(customerId);
+        customer.setEmail(request.getEmail());
+        customer.setPhone(request.getPhone());
+        customerRepository.save(customer);
+    }
+
     public Customer getCustomerById(int customerId) {
         return customerRepository.findById(customerId).orElse(null);
     }
