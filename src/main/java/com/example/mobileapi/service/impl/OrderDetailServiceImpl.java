@@ -82,6 +82,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .orderId(orderDetail.getOrder().getId())
                 .productResponseDTO(toProductResponseDTO(orderDetail.getProduct()))
                 .quantity(orderDetail.getQuantity())
+
                 .build();
     }
 
