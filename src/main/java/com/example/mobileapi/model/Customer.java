@@ -3,12 +3,12 @@ package com.example.mobileapi.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.*;
+
 
 @Table(name = "customers")
 @Entity
@@ -38,15 +38,16 @@ public class Customer {
     private String detail;
     @Column(nullable = false, name = "number_phone")
     String phone;
-
+    // 0-customer, 1-admin
+    boolean role;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    Set<Cart> carts = new HashSet<>();
+    List<Cart> carts = new ArrayList<>();
 
     @Column(name = "reset_code")
     String resetCode;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    Set<Order> orders = new HashSet<>();
+    List<Order> orders = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

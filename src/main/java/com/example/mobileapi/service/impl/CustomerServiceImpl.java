@@ -25,12 +25,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public int saveCustomer(CustomerRequestDTO request) {
-        Customer customer = Customer.builder()
-                .username(request.getUsername())
-                .password(request.getPassword())
-                .email(request.getEmail())
-                .phone(request.getPhone())
-                .build();
+        Customer customer = Customer.builder().
+                fullname(request.getFullname()).
+                username(request.getUsername()).
+                password(request.getPassword()).
+                email(request.getEmail()).
+                phone(request.getPhone()).
+                build();
         customerRepository.save(customer);
         return customer.getId();
     }
@@ -38,15 +39,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void updateCustomer(int customerId, CustomerRequestDTO request) {
         Customer customer = getCustomerById(customerId);
-        if (customer != null) {
-            customer.setUsername(request.getUsername());
-            customer.setPassword(request.getPassword());
-            customer.setEmail(request.getEmail());
-            customer.setPhone(request.getPhone());
-            customerRepository.save(customer);
-        } else {
-            throw new IllegalArgumentException("Không tìm thấy khách hàng với ID: " + customerId);
-        }
+        customer.setFullname(request.getFullname());
+        customer.setUsername(request.getUsername());
+        customer.setPassword(request.getPassword());
+        customer.setEmail(request.getEmail());
+        customer.setPhone(request.getPhone());
+        customerRepository.save(customer);
     }
 
     @Override
@@ -66,7 +64,14 @@ public class CustomerServiceImpl implements CustomerService {
                     .id(customer.getId())
                     .build();
         }
-        return null;
+        return CustomerResponseDTO.builder()
+                .username(customer.getUsername())
+                .phone(customer.getPhone())
+                .email(customer.getEmail())
+                .fullname(customer.getFullname())
+                .id(customer.getId())
+                .role(customer.isRole())
+                .build();
     }
 
     @Override
@@ -75,10 +80,12 @@ public class CustomerServiceImpl implements CustomerService {
         List<CustomerResponseDTO> customerResponseDTOS = new ArrayList<>();
         for (Customer customer : customers) {
             customerResponseDTOS.add(CustomerResponseDTO.builder()
+                            .fullname(customer.getFullname())
                     .username(customer.getUsername())
                     .phone(customer.getPhone())
                     .email(customer.getEmail())
                     .id(customer.getId())
+                            .role(customer.isRole())
                     .build());
         }
         return customerResponseDTOS;
@@ -92,18 +99,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseDTO login(String username, String password) {
         Customer customer = customerRepository.login(username, password);
-        if (customer != null) {
-            return CustomerResponseDTO.builder()
-                    .username(customer.getUsername())
-                    .email(customer.getEmail())
-                    .phone(customer.getPhone())
-                    .id(customer.getId())
-                    .build();
-        }
-        return null;
-    }
-
-
+        return CustomerResponseDTO.builder()
+                .fullname(customer.getFullname())
+                .username(customer.getUsername())
+                .email(customer.getEmail())
+                .phone(customer.getPhone())
+                .id(customer.getId())
+                .role(customer.isRole())
+                .build();
 
     @Override
     public void resetPassword(String username, String resetCode, String newPassword) {

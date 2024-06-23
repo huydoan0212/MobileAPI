@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -72,25 +70,40 @@ public class ProductServiceImpl implements ProductService {
                 .name(product.getName())
                 .img(product.getImg())
                 .id(product.getId())
-                .detail(product.getDetail())
                 .build();
     }
 
     @Override
-    public List<ProductResponseDTO> getProductByName(String nameProduct) {
-        List<Product> products = productRepository.findByNameContainingIgnoreCase(nameProduct);
-        return products.stream()
-                .map(product -> ProductResponseDTO.builder()
-                        .categoryName(product.getCategory().getName())
-                        .price(product.getPrice())
-                        .name(product.getName())
-                        .img(product.getImg())
-                        .id(product.getId())
-                        .detail(product.getDetail())
-                        .build())
-                .collect(Collectors.toList());
+    public List<ProductResponseDTO> findByCategoryId(Integer categoryId) {
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
+        for (Product product : products) {
+            productResponseDTOS.add(ProductResponseDTO.builder()
+                    .categoryName(product.getCategory().getName())
+                    .price(product.getPrice())
+                    .name(product.getName())
+                    .img(product.getImg())
+                    .id(product.getId())
+                    .build());
+        }
+        return productResponseDTOS;
     }
 
+    @Override
+    public List<ProductResponseDTO> findByNameContainingIgnoreCase(String name) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(name);
+        List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
+        for (Product product : products) {
+            productResponseDTOS.add(ProductResponseDTO.builder()
+                    .categoryName(product.getCategory().getName())
+                    .price(product.getPrice())
+                    .name(product.getName())
+                    .img(product.getImg())
+                    .id(product.getId())
+                    .build());
+        }
+        return productResponseDTOS;
+    }
 
     public Product getById(int id) {
         return productRepository.findById(id).orElse(null);

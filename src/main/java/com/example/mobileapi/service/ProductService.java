@@ -11,5 +11,6 @@ public interface ProductService {
     void deleteProduct(int id);
     List<ProductResponseDTO> getAllProducts();
     ProductResponseDTO getProductById(int id);
-    List<ProductResponseDTO> getProductByName(String nameProduct);
+    List<ProductResponseDTO> findByCategoryId(Integer categoryId);
+    List<ProductResponseDTO> findByNameContainingIgnoreCase(String name);
 }

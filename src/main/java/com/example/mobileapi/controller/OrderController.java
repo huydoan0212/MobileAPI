@@ -2,6 +2,7 @@ package com.example.mobileapi.controller;
 
 import com.example.mobileapi.dto.request.OrderEditRequestDTO;
 import com.example.mobileapi.dto.request.OrderRequestDTO;
+import com.example.mobileapi.dto.response.MonthlyRevenueResponse;
 import com.example.mobileapi.dto.response.OrderResponseDTO;
 import com.example.mobileapi.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,15 @@ public class OrderController {
     @GetMapping("/list")
     public List<OrderResponseDTO> getAllOrders() {
         return orderService.getAllOrders();
+    }
+
+    @DeleteMapping("/{orderId}")
+    public void deleteOrder(@PathVariable("orderId") int orderId) {
+        orderService.deleteOrder(orderId);
+    }
+
+    @GetMapping("/revenue")
+    public List<MonthlyRevenueResponse> getOrderRevenue() {
+        return orderService.getMonthlyRevenue();
     }
 }

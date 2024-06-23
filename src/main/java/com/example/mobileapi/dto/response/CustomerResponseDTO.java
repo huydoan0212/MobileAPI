@@ -17,4 +17,5 @@ public class CustomerResponseDTO {
     private String email;
 
     private String phone;
+    private boolean role;
 }
