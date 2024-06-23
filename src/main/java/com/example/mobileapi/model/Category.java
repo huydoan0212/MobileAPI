@@ -28,6 +28,6 @@ public class Category {
     private String img;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private Set<Product> products = new HashSet<>();
+    private List<Product> products = new ArrayList<>();
 }
 

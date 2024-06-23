@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
                 .status(orderRequestDTO.getStatus())
                 .orderDetails(orderRequestDTO.getOrderDetails().stream()
                         .map(this::convertToOrderDetailEntity)
-                        .collect(Collectors.toSet()))
+                        .collect(Collectors.toList()))
                 .build();
 
         order.getOrderDetails().forEach(orderDetail -> orderDetail.setOrder(order));
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus(orderRequestDTO.getStatus());
             order.setOrderDetails(orderRequestDTO.getOrderDetails().stream()
                     .map(this::convertToOrderDetailEntity)
-                    .collect(Collectors.toSet()));
+                    .collect(Collectors.toList()));
             order.getOrderDetails().forEach(orderDetail -> orderDetail.setOrder(order));
             orderRepository.save(order);
         }
@@ -126,9 +126,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderResponseDTO convertToOrderResponseDTO(Order order) {
-        Set<OrderDetailResponseDTO> orderDetailDTOs = order.getOrderDetails().stream()
+        List<OrderDetailResponseDTO> orderDetailDTOs = order.getOrderDetails().stream()
                 .map(this::convertToOrderDetailResponseDTO)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         return OrderResponseDTO.builder()
                 .id(order.getId())

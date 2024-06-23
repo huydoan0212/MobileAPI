@@ -5,9 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Table(name = "customers")
 @Entity
@@ -38,10 +36,10 @@ public class Customer {
     String phone;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    Set<Cart> carts = new HashSet<>();
+    List<Cart> carts = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    Set<Order> orders = new HashSet<>();
+    List<Order> orders = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

@@ -34,5 +34,12 @@ public class ProductController {
     public List<ProductResponseDTO> getProducts() {
         return productService.getAllProducts();
     }
-
+    @GetMapping("/list/{categoryId}")
+    public List<ProductResponseDTO> getProductsByCategoryId(@PathVariable int categoryId) {
+        return productService.findByCategoryId(categoryId);
+    }
+    @GetMapping("/list/findByName/{name}")
+    public List<ProductResponseDTO> getProductsByName(@PathVariable String name) {
+        return productService.findByNameContainingIgnoreCase(name);
+    }
 }

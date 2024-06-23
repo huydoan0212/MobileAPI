@@ -3,6 +3,7 @@ package com.example.mobileapi.service.impl;
 import com.example.mobileapi.dto.request.OrderDetailRequestDTO;
 import com.example.mobileapi.dto.request.OrderDetailSaveRequest;
 import com.example.mobileapi.dto.response.OrderDetailResponseDTO;
+import com.example.mobileapi.dto.response.ProductResponseDTO;
 import com.example.mobileapi.model.Order;
 import com.example.mobileapi.model.OrderDetail;
 import com.example.mobileapi.model.Product;
@@ -39,7 +40,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         return OrderDetailResponseDTO.builder()
                 .orderId(order.getId())
-                .productId(product.getId())
+                .productResponseDTO(ProductResponseDTO.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .img(product.getImg())
+                        .categoryName(product.getCategory().getName())
+                        .price(product.getPrice())
+                        .build())
                 .quantity(requestDTO.getQuantity())
                 .build();
     }
@@ -54,8 +61,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         orderDetail.setQuantity(requestDTO.getQuantity());
         return OrderDetailResponseDTO.builder()
                 .orderId(order.getId())
-                .productId(product.getId())
-                .quantity(requestDTO.getQuantity())
+                .productResponseDTO(ProductResponseDTO.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .img(product.getImg())
+                        .categoryName(product.getCategory().getName())
+                        .price(product.getPrice())
+                        .build())                .quantity(requestDTO.getQuantity())
                 .build();
     }
 
@@ -67,20 +79,34 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetailResponseDTO findOrderDetailById(int id) {
         OrderDetail orderDetail = orderDetailRepository.findById(id).orElse(null);
+        Product product = productRepository.findById(orderDetail.getProduct().getId()).orElse(null);
         return OrderDetailResponseDTO.builder()
-                .productId(orderDetail.getProduct().getId())
-                .orderId(orderDetail.getOrder().getId())
+                .productResponseDTO(ProductResponseDTO.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .img(product.getImg())
+                        .categoryName(product.getCategory().getName())
+                        .price(product.getPrice())
+                        .build())                .orderId(orderDetail.getOrder().getId())
                 .quantity(orderDetail.getQuantity())
                 .build();
     }
 
     @Override
     public List<OrderDetailResponseDTO> findOrderDetailByOrderId(int orderId) {
+
         List<OrderDetail> orderDetails = orderDetailRepository.findOrderByOrderId(orderId);
+
         return orderDetails.stream()
                 .map(orderDetail -> OrderDetailResponseDTO.builder()
                         .orderId(orderDetail.getOrder().getId())
-                        .productId(orderDetail.getProduct().getId())
+                        .productResponseDTO(ProductResponseDTO.builder()
+                                .id(orderDetail.getProduct().getId())
+                                .price(orderDetail.getProduct().getPrice())
+                                .categoryName(orderDetail.getProduct().getCategory().getName())
+                                .name(orderDetail.getProduct().getName())
+                                .img(orderDetail.getProduct().getImg())
+                                .build())
                         .quantity(orderDetail.getQuantity())
                         .build())
                 .collect(Collectors.toList());
@@ -92,8 +118,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         OrderDetail orderDetail = orderDetailRepository.findOrderByProductId(productId);
         return OrderDetailResponseDTO.builder()
                 .orderId(orderDetail.getOrder().getId())
-                .productId(orderDetail.getProduct().getId())
-                .quantity(orderDetail.getQuantity())
+                .productResponseDTO(ProductResponseDTO.builder()
+                        .id(orderDetail.getProduct().getId())
+                        .price(orderDetail.getProduct().getPrice())
+                        .categoryName(orderDetail.getProduct().getCategory().getName())
+                        .name(orderDetail.getProduct().getName())
+                        .img(orderDetail.getProduct().getImg())
+                        .build())                .quantity(orderDetail.getQuantity())
                 .build();
     }
 }

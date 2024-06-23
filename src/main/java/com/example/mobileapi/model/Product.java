@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "products")
@@ -32,9 +34,9 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<CartItem> cartItems;
+    private List<CartItem> cartItems;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<OrderDetail> orderDetails = new HashSet<>();
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 }
 

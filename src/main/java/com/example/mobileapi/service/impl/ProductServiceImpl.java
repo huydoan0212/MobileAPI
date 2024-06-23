@@ -72,6 +72,39 @@ public class ProductServiceImpl implements ProductService {
                 .id(product.getId())
                 .build();
     }
+
+    @Override
+    public List<ProductResponseDTO> findByCategoryId(Integer categoryId) {
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
+        for (Product product : products) {
+            productResponseDTOS.add(ProductResponseDTO.builder()
+                    .categoryName(product.getCategory().getName())
+                    .price(product.getPrice())
+                    .name(product.getName())
+                    .img(product.getImg())
+                    .id(product.getId())
+                    .build());
+        }
+        return productResponseDTOS;
+    }
+
+    @Override
+    public List<ProductResponseDTO> findByNameContainingIgnoreCase(String name) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(name);
+        List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
+        for (Product product : products) {
+            productResponseDTOS.add(ProductResponseDTO.builder()
+                    .categoryName(product.getCategory().getName())
+                    .price(product.getPrice())
+                    .name(product.getName())
+                    .img(product.getImg())
+                    .id(product.getId())
+                    .build());
+        }
+        return productResponseDTOS;
+    }
+
     public Product getById(int id) {
         return productRepository.findById(id).orElse(null);
     }
