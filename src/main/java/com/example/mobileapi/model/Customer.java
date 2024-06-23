@@ -3,9 +3,12 @@ package com.example.mobileapi.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.*;
+
 
 @Table(name = "customers")
 @Entity
@@ -31,13 +34,17 @@ public class Customer {
 
     @Column(nullable = false, name = "password")
     String password;
-
+    @Column(nullable = false)
+    private String detail;
     @Column(nullable = false, name = "number_phone")
     String phone;
     // 0-customer, 1-admin
     boolean role;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     List<Cart> carts = new ArrayList<>();
+
+    @Column(name = "reset_code")
+    String resetCode;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     List<Order> orders = new ArrayList<>();
@@ -56,5 +63,10 @@ public class Customer {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+
+
+
+
 }
 
