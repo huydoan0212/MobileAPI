@@ -3,6 +3,7 @@ package com.example.mobileapi.service.impl;
 import com.example.mobileapi.dto.request.OrderEditRequestDTO;
 import com.example.mobileapi.dto.request.OrderRequestDTO;
 import com.example.mobileapi.dto.request.OrderDetailRequestDTO;
+import com.example.mobileapi.dto.response.MonthlyRevenueResponse;
 import com.example.mobileapi.dto.response.OrderResponseDTO;
 import com.example.mobileapi.dto.response.OrderDetailResponseDTO;
 import com.example.mobileapi.model.Order;
@@ -14,10 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -108,6 +110,22 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
     }
 
+    @Override
+    public List<MonthlyRevenueResponse> getMonthlyRevenue() {
+        List<Object[]> monthlyData = orderRepository.getMonthlyRevenue();
+        List<MonthlyRevenueResponse> responseList = new ArrayList<>();
+
+        for (Object[] row : monthlyData) {
+            int month = (int) row[0];
+            BigDecimal value = (BigDecimal) row[1];
+            int revenue = value.intValueExact();
+            responseList.add(new MonthlyRevenueResponse(month, revenue));
+        }
+
+        return responseList;
+    }
+
+
     public List<OrderResponseDTO> getOrdersByCustomerId(int customerId) {
         List<Order> orders = orderRepository.findByCustomerId(customerId);
         if (orders.isEmpty()) {
@@ -136,6 +154,7 @@ public class OrderServiceImpl implements OrderService {
                 .address(order.getAddress())
                 .numberPhone(order.getNumberPhone())
                 .status(order.getStatus())
+                .receiver(order.getReceiver())
                 .orderDetails(orderDetailDTOs)
                 .build();
     }

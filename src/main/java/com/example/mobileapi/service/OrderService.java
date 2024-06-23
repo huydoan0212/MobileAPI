@@ -2,6 +2,7 @@ package com.example.mobileapi.service;
 
 import com.example.mobileapi.dto.request.OrderEditRequestDTO;
 import com.example.mobileapi.dto.request.OrderRequestDTO;
+import com.example.mobileapi.dto.response.MonthlyRevenueResponse;
 import com.example.mobileapi.dto.response.OrderResponseDTO;
 
 import java.util.List;
@@ -20,4 +21,9 @@ public interface OrderService {
     List<OrderResponseDTO> getAllOrders();
 
     void editOrder(int id, OrderEditRequestDTO orderEditRequestDTO);
+
+    List<MonthlyRevenueResponse> getMonthlyRevenue();
+
+
+
 }
