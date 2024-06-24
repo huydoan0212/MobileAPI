@@ -2,10 +2,8 @@ package com.example.mobileapi.service.impl;
 
 import com.example.mobileapi.dto.request.ProductRequestDTO;
 import com.example.mobileapi.dto.response.ProductResponseDTO;
-import com.example.mobileapi.model.Category;
 import com.example.mobileapi.model.Product;
 import com.example.mobileapi.repository.ProductRepository;
-import com.example.mobileapi.service.CategoryService;
 import com.example.mobileapi.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -70,24 +70,30 @@ public class ProductServiceImpl implements ProductService {
                 .name(product.getName())
                 .img(product.getImg())
                 .id(product.getId())
+                .detail(product.getDetail())
                 .build();
     }
 
     @Override
     public List<ProductResponseDTO> findByCategoryId(Integer categoryId) {
-        List<Product> products = productRepository.findByCategoryId(categoryId);
-        List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
-        for (Product product : products) {
-            productResponseDTOS.add(ProductResponseDTO.builder()
-                    .categoryName(product.getCategory().getName())
-                    .price(product.getPrice())
-                    .name(product.getName())
-                    .img(product.getImg())
-                    .id(product.getId())
-                    .build());
-        }
-        return productResponseDTOS;
+        return null;
     }
+
+    @Override
+    public List<ProductResponseDTO> getProductByName(String nameProduct) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(nameProduct);
+        return products.stream()
+                .map(product -> ProductResponseDTO.builder()
+                        .categoryName(product.getCategory().getName())
+                        .price(product.getPrice())
+                        .name(product.getName())
+                        .img(product.getImg())
+                        .id(product.getId())
+                        .detail(product.getDetail())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<ProductResponseDTO> findByNameContainingIgnoreCase(String name) {
