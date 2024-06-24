@@ -12,5 +12,8 @@ public interface ProductService {
     List<ProductResponseDTO> getAllProducts();
     ProductResponseDTO getProductById(int id);
     List<ProductResponseDTO> findByCategoryId(Integer categoryId);
+
+    List<ProductResponseDTO> getProductByName(String nameProduct);
+
     List<ProductResponseDTO> findByNameContainingIgnoreCase(String name);
 }
