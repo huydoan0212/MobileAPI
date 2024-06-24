@@ -30,7 +30,6 @@ public class Product {
     private double price;
     @Column(nullable = false)
     private String detail;
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

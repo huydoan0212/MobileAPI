@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class ProductRequestDTO implements Serializable {
     private String name;
     private String img;
-    private double price;
+    private int price;
     private int categoryId;
     private String detail;
 
