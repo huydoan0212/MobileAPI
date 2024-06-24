@@ -13,4 +13,6 @@ public class ProductRequestDTO implements Serializable {
     private String img;
     private int price;
     private int categoryId;
+    private String detail;
+
 }

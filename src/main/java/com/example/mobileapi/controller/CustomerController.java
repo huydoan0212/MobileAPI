@@ -51,5 +51,15 @@ public class CustomerController {
     public CustomerResponseDTO login(@RequestBody LoginRequest loginRequest) {
         return customerService.login(loginRequest.getUsername(), loginRequest.getPassword());
     }
+
+    @PostMapping("/resetPassword/{username}")
+    public void resetPassword(@PathVariable String username, String resetCode,  @RequestBody String newPassword) {
+        customerService.resetPassword(username,resetCode, newPassword);
+    }
+
+    @PostMapping("/initPasswordReset/{username}")
+    public void initPasswordReset(@PathVariable String username) {
+        customerService.initPasswordReset(username);
+    }
 }
 

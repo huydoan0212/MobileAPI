@@ -27,7 +27,8 @@ public class Product {
     @Column(nullable = false)
     private String img;
     @Column(nullable = false)
-    private int price;
+    private double price;
+    @Column(nullable = false)
     private String detail;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)

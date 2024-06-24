@@ -13,4 +13,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     boolean existsByUsername(@Param("username") String username);
     @Query("SELECT u  from Customer u WHERE u.username = :username and u.password= :password ")
     Customer login(@Param("username") String username, @Param("password") String password);
+    Customer findByUsername(String username);
+
+
 }
