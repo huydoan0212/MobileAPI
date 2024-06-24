@@ -25,7 +25,7 @@ public class Order {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
     private LocalDateTime orderDate;
-    @Column(name = "total_mount", nullable = false)
+    @Column(name = "total_amount", nullable = false)
     private Integer totalAmount; // Đảm bảo rằng tên trường này trùng khớp với tên trong cơ sở dữ liệu
 
     private String address;
