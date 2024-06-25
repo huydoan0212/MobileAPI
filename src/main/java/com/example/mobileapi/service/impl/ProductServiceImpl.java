@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryServiceImpl categoryService;
+
     @Override
     public int saveProduct(ProductRequestDTO productRequestDTO) {
         Product product = Product.builder()
@@ -31,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(int id,ProductRequestDTO productRequestDTO) {
+    public void updateProduct(int id, ProductRequestDTO productRequestDTO) {
         Product product = getById(id);
         product.setName(productRequestDTO.getName());
         product.setPrice(productRequestDTO.getPrice());
@@ -51,11 +53,11 @@ public class ProductServiceImpl implements ProductService {
         List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
         for (Product product : products) {
             productResponseDTOS.add(ProductResponseDTO.builder()
-                            .categoryName(product.getCategory().getName())
-                            .price(product.getPrice())
-                            .name(product.getName())
-                            .img(product.getImg())
-                            .id(product.getId())
+                    .categoryName(product.getCategory().getName())
+                    .price(product.getPrice())
+                    .name(product.getName())
+                    .img(product.getImg())
+                    .id(product.getId())
                     .build());
         }
         return productResponseDTOS;
@@ -70,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
                 .name(product.getName())
                 .img(product.getImg())
                 .id(product.getId())
+                .detail(product.getDetail())
                 .build();
     }
 
