@@ -53,9 +53,13 @@ public class CustomerController {
     }
 
     @PostMapping("/resetPassword/{username}")
-    public void resetPassword(@PathVariable String username, String resetCode,  @RequestBody String newPassword) {
-        customerService.resetPassword(username,resetCode, newPassword);
+    public void resetPassword(
+            @PathVariable String username,
+            @RequestParam String resetCode,
+            @RequestParam String newPassword) {
+        customerService.resetPassword(username, resetCode, newPassword);
     }
+
 
     @PostMapping("/initPasswordReset/{username}")
     public void initPasswordReset(@PathVariable String username) {
