@@ -1,17 +1,15 @@
 package com.example.mobileapi.service.impl;
 
 import com.example.mobileapi.dto.request.CustomerRequestDTO;
-import com.example.mobileapi.dto.response.CartResponseDTO;
 import com.example.mobileapi.dto.response.CustomerResponseDTO;
 import com.example.mobileapi.model.Customer;
 import com.example.mobileapi.repository.CustomerRepository;
-import com.example.mobileapi.service.CartService;
 import com.example.mobileapi.service.CustomerService;
 import com.example.mobileapi.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +17,21 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class CustomerServiceImpl implements CustomerService {
+
     private final CustomerRepository customerRepository;
     private final EmailService emailService;
 
     @Override
     public int saveCustomer(CustomerRequestDTO request) {
-        Customer customer = Customer.builder().
-                fullname(request.getFullname()).
-                username(request.getUsername()).
-                password(request.getPassword()).
-                email(request.getEmail()).
-                phone(request.getPhone()).
-                build();
+        Customer customer = Customer.builder()
+                .fullname(request.getFullname())
+                .username(request.getUsername())
+                .password(hashPassword(request.getPassword()))
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .build();
         customerRepository.save(customer);
         return customer.getId();
     }
@@ -50,7 +50,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomer(int customerId) {
         customerRepository.deleteById(customerId);
-
     }
 
     @Override
@@ -75,12 +74,12 @@ public class CustomerServiceImpl implements CustomerService {
         List<CustomerResponseDTO> customerResponseDTOS = new ArrayList<>();
         for (Customer customer : customers) {
             customerResponseDTOS.add(CustomerResponseDTO.builder()
-                            .fullname(customer.getFullname())
+                    .fullname(customer.getFullname())
                     .username(customer.getUsername())
                     .phone(customer.getPhone())
                     .email(customer.getEmail())
                     .id(customer.getId())
-                            .role(customer.isRole())
+                    .role(customer.isRole())
                     .build());
         }
         return customerResponseDTOS;
@@ -88,7 +87,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean checkUsername(String username) {
-        System.out.println(customerRepository.existsByUsername(username));
         return customerRepository.existsByUsername(username);
     }
 
@@ -118,7 +116,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void resetPassword(String username, String resetCode, String newPassword) {
         Customer customer = getCustomerByName(username);
         if (customer != null && resetCode.equals(customer.getResetCode())) {
-            customer.setPassword(newPassword);
+            customer.setPassword(hashPassword(newPassword));
             customer.setResetCode(null); // Xóa mã reset sau khi đặt lại mật khẩu thành công
             customerRepository.save(customer);
             emailService.sendPasswordResetEmail(
@@ -162,6 +160,19 @@ public class CustomerServiceImpl implements CustomerService {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
         return sb.toString();
+    }
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedPassword = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedPassword) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error hashing password", e);
+        }
     }
 
     public Customer getCustomerById(int customerId) {
