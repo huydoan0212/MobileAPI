@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = Customer.builder()
                 .fullname(request.getFullname())
                 .username(request.getUsername())
-                .password(request.getPassword())
+                .password(hashPassword(request.getPassword()))
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .build();
@@ -58,17 +60,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseDTO getCustomer(int customerId) {
         Customer customer = getCustomerById(customerId);
-        if (customer != null) {
-            return CustomerResponseDTO.builder()
-                    .username(customer.getUsername())
-                    .phone(customer.getPhone())
-                    .email(customer.getEmail())
-                    .fullname(customer.getFullname())
-                    .id(customer.getId())
-                    .role(customer.isRole())
-                    .build();
+        if (customer == null) {
+            return null;
         }
-        return null;
+        return CustomerResponseDTO.builder()
+                .username(customer.getUsername())
+                .phone(customer.getPhone())
+                .email(customer.getEmail())
+                .fullname(customer.getFullname())
+                .id(customer.getId())
+                .role(customer.isRole())
+                .build();
     }
 
     @Override
@@ -126,10 +128,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public void updateByAdmin(int customerId, CustomerRequestDTO request) {
+        Customer customer = getCustomerById(customerId);
+        customer.setFullname(request.getFullname());
+        customer.setEmail(request.getEmail());
+        customer.setPhone(request.getPhone());
+        customerRepository.save(customer);
+    }
+
+    @Override
     public void resetPassword(String username, String resetCode, String newPassword) {
         Customer customer = getCustomerByName(username);
         if (customer != null && resetCode.equals(customer.getResetCode())) {
-            customer.setPassword(newPassword);
+            customer.setPassword(hashPassword(newPassword));
             customer.setResetCode(null); // Xóa mã reset sau khi đặt lại mật khẩu thành công
             customerRepository.save(customer);
             emailService.sendPasswordResetEmail(
@@ -160,11 +171,6 @@ public class CustomerServiceImpl implements CustomerService {
             throw new IllegalArgumentException("Không tìm thấy khách hàng với username: " + username);
         }
     }
-
-    Customer getCustomerById(int customerId) {
-        return customerRepository.findById(customerId).orElse(null);
-    }
-
     Customer getCustomerByName(String username) {
         return customerRepository.findByUsername(username);
     }
@@ -178,5 +184,22 @@ public class CustomerServiceImpl implements CustomerService {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
         return sb.toString();
+    }
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedPassword = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedPassword) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error hashing password", e);
+        }
+    }
+
+    public Customer getCustomerById(int customerId) {
+        return customerRepository.findById(customerId).orElse(null);
     }
 }

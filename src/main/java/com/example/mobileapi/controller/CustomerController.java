@@ -1,11 +1,13 @@
 package com.example.mobileapi.controller;
 
+import com.example.mobileapi.dto.request.CartRequestDTO;
 import com.example.mobileapi.dto.request.CustomerRequestDTO;
 import com.example.mobileapi.dto.request.CustomerUpdateRequestDTO;
 import com.example.mobileapi.dto.request.LoginRequest;
 import com.example.mobileapi.dto.response.CustomerResponseDTO;
 import com.example.mobileapi.dto.response.ResponseData;
 import com.example.mobileapi.model.Customer;
+import com.example.mobileapi.service.CartService;
 import com.example.mobileapi.service.CustomerService;
 import com.example.mobileapi.service.impl.CustomerServiceImpl;
 import lombok.Getter;
@@ -19,13 +21,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
-
+    private final CartService cartService;
     @PostMapping
     public int addCustomer(@RequestBody CustomerRequestDTO customer) {
         if (customerService.checkUsername(customer.getUsername())) {
             return -1;
         }
         int userId = customerService.saveCustomer(customer);
+        CartRequestDTO cartRequestDTO = new CartRequestDTO();
+        cartRequestDTO.setCustomerId(userId);
+        cartService.saveCart(cartRequestDTO);
         return userId;
     }
 
@@ -34,6 +39,10 @@ public class CustomerController {
         customerService.updateCustomer(customerId, customer);
     }
 
+    @PutMapping("/admin/{customerId}")
+    public void updateAdmin(@PathVariable int customerId, @RequestBody CustomerRequestDTO customer) {
+        customerService.updateByAdmin(customerId, customer);
+    }
     @DeleteMapping("/{customerId}")
     public void deleteCustomer(@PathVariable int customerId) {
         customerService.deleteCustomer(customerId);
@@ -56,11 +65,17 @@ public class CustomerController {
 
     @PostMapping("/login")
     public CustomerResponseDTO login(@RequestBody LoginRequest loginRequest) {
-        return customerService.login(loginRequest.getUsername(), loginRequest.getPassword());
+        CustomerResponseDTO cus = customerService.login(loginRequest.getUsername(), loginRequest.getPassword());
+        cus.setCartId(cartService.getCartByCustomerId(cus.getId()).getId());
+        return cus;
     }
 
     @PostMapping("/resetPassword/{username}")
-    public void resetPassword(@PathVariable String username, @RequestParam String resetCode, @RequestParam String newPassword) {
+
+    public void resetPassword(
+            @PathVariable String username,
+            @RequestParam String resetCode,
+            @RequestParam String newPassword) {
         customerService.resetPassword(username, resetCode, newPassword);
     }
 
