@@ -27,8 +27,9 @@ public class Product {
     @Column(nullable = false)
     private String img;
     @Column(nullable = false)
-    private Integer price;
-    @Column(nullable = false)
+    private int price;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String detail;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)

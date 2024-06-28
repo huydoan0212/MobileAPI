@@ -2,6 +2,7 @@ package com.example.mobileapi.service;
 
 
 import com.example.mobileapi.dto.request.CustomerRequestDTO;
+import com.example.mobileapi.dto.request.CustomerUpdateRequestDTO;
 import com.example.mobileapi.dto.response.CustomerResponseDTO;
 
 import java.util.List;
@@ -14,6 +15,10 @@ public interface CustomerService {
     List<CustomerResponseDTO> getAllCustomers();
     boolean checkUsername(String username);
     CustomerResponseDTO login(String username, String password);
+    CustomerResponseDTO updateCustomerById(int customerId, CustomerUpdateRequestDTO request);
+
+
+
     void updateByAdmin(int customerId, CustomerRequestDTO customerRequestDTO);
     void resetPassword(String username, String resetCode, String newPassword);
 

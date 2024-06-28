@@ -1,6 +1,7 @@
 package com.example.mobileapi.service.impl;
 
 import com.example.mobileapi.dto.request.CustomerRequestDTO;
+import com.example.mobileapi.dto.request.CustomerUpdateRequestDTO;
 import com.example.mobileapi.dto.response.CustomerResponseDTO;
 import com.example.mobileapi.model.Customer;
 import com.example.mobileapi.repository.CustomerRepository;
@@ -49,9 +50,11 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(customer);
     }
 
+
     @Override
     public void deleteCustomer(int customerId) {
         customerRepository.deleteById(customerId);
+
     }
 
     @Override
@@ -95,6 +98,25 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseDTO login(String username, String password) {
         Customer customer = customerRepository.login(username, password);
+        return CustomerResponseDTO.builder()
+                .fullname(customer.getFullname())
+                .username(customer.getUsername())
+                .email(customer.getEmail())
+                .phone(customer.getPhone())
+                .id(customer.getId())
+                .role(customer.isRole())
+                .build();
+
+    }
+
+    @Override
+    public CustomerResponseDTO updateCustomerById(int customerId, CustomerUpdateRequestDTO request) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Khong tim thay customer"));
+        customer.setFullname(request.getName());
+        customer.setPassword(request.getPassword());
+        customer.setEmail(request.getEmail());
+        customer.setPhone(request.getPhone());
+        customerRepository.save(customer);
         return CustomerResponseDTO.builder()
                 .fullname(customer.getFullname())
                 .username(customer.getUsername())
