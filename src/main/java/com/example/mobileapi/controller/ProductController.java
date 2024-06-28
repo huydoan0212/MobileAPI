@@ -42,4 +42,8 @@ public class ProductController {
     public List<ProductResponseDTO> getProductsByName(@PathVariable String name) {
         return productService.findByNameContainingIgnoreCase(name);
     }
+    @GetMapping("/search")
+    public List<ProductResponseDTO> getProductByName(@RequestParam String name) {
+        return productService.getProductByName(name);
+    }
 }
