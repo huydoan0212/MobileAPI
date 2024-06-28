@@ -1,6 +1,7 @@
 package com.example.mobileapi.controller;
 
 import com.example.mobileapi.dto.request.CustomerRequestDTO;
+import com.example.mobileapi.dto.request.CustomerUpdateRequestDTO;
 import com.example.mobileapi.dto.request.LoginRequest;
 import com.example.mobileapi.dto.response.CustomerResponseDTO;
 import com.example.mobileapi.dto.response.ResponseData;
@@ -21,45 +22,57 @@ public class CustomerController {
 
     @PostMapping
     public int addCustomer(@RequestBody CustomerRequestDTO customer) {
-        if(customerService.checkUsername(customer.getUsername())) {
+        if (customerService.checkUsername(customer.getUsername())) {
             return -1;
         }
         int userId = customerService.saveCustomer(customer);
         return userId;
     }
+
     @PutMapping("/{customerId}")
-    public void updateCustomer(@PathVariable int customerId,@RequestBody CustomerRequestDTO customer) {
+    public void updateCustomer(@PathVariable int customerId, @RequestBody CustomerRequestDTO customer) {
         customerService.updateCustomer(customerId, customer);
     }
+
     @DeleteMapping("/{customerId}")
     public void deleteCustomer(@PathVariable int customerId) {
         customerService.deleteCustomer(customerId);
     }
+
     @GetMapping("/{customerId}")
     public CustomerResponseDTO getCustomer(@PathVariable int customerId) {
         return customerService.getCustomer(customerId);
     }
+
     @GetMapping("/list")
     public List<CustomerResponseDTO> getCustomers() {
         return customerService.getAllCustomers();
     }
+
     @GetMapping("/checkUsername/{username}")
     public boolean checkUsername(@PathVariable String username) {
         return customerService.checkUsername(username);
     }
+
     @PostMapping("/login")
     public CustomerResponseDTO login(@RequestBody LoginRequest loginRequest) {
         return customerService.login(loginRequest.getUsername(), loginRequest.getPassword());
     }
 
     @PostMapping("/resetPassword/{username}")
-    public void resetPassword(@PathVariable String username, String resetCode,  @RequestBody String newPassword) {
-        customerService.resetPassword(username,resetCode, newPassword);
+    public void resetPassword(@PathVariable String username, @RequestParam String resetCode, @RequestParam String newPassword) {
+        customerService.resetPassword(username, resetCode, newPassword);
     }
+
 
     @PostMapping("/initPasswordReset/{username}")
     public void initPasswordReset(@PathVariable String username) {
         customerService.initPasswordReset(username);
+    }
+
+    @PutMapping("/updateByUser/{id}")
+    public CustomerResponseDTO updateByUser(@PathVariable int id, @RequestBody CustomerUpdateRequestDTO customer) {
+        return customerService.updateCustomerById(id, customer);
     }
 }
 
