@@ -15,10 +15,11 @@ public interface CustomerService {
     List<CustomerResponseDTO> getAllCustomers();
     boolean checkUsername(String username);
     CustomerResponseDTO login(String username, String password);
-
     CustomerResponseDTO updateCustomerById(int customerId, CustomerUpdateRequestDTO request);
 
 
+
+    void updateByAdmin(int customerId, CustomerRequestDTO customerRequestDTO);
     void resetPassword(String username, String resetCode, String newPassword);
 
     void initPasswordReset(String username);

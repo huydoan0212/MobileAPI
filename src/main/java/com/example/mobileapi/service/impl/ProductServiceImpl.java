@@ -36,7 +36,6 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productRequestDTO.getName());
         product.setPrice(productRequestDTO.getPrice());
         product.setImg(productRequestDTO.getImg());
-        product.setCategory(categoryService.getById(productRequestDTO.getCategoryId()));
         productRepository.save(product);
     }
 
@@ -76,7 +75,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDTO> findByCategoryId(Integer categoryId) {
-        return null;
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        return products.stream()
+                .map(product -> ProductResponseDTO.builder()
+                        .categoryName(product.getCategory().getName())
+                        .price(product.getPrice())
+                        .name(product.getName())
+                        .img(product.getImg())
+                        .id(product.getId())
+                        .detail(product.getDetail())
+                        .build())
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -93,7 +103,6 @@ public class ProductServiceImpl implements ProductService {
                         .build())
                 .collect(Collectors.toList());
     }
-
 
     @Override
     public List<ProductResponseDTO> findByNameContainingIgnoreCase(String name) {

@@ -23,7 +23,7 @@ public class Customer {
     @Column(nullable = false, name = "id")
     Integer id;
 
-    @Column(nullable = false, name = "fullname")
+    @Column( name = "fullname")
     String fullname;
 
     @Column(nullable = false, name = "username")
@@ -34,8 +34,7 @@ public class Customer {
 
     @Column(nullable = false, name = "password")
     String password;
-    @Column(nullable = false)
-    private String detail;
+
     @Column(nullable = false, name = "number_phone")
     String phone;
     // 0-customer, 1-admin
