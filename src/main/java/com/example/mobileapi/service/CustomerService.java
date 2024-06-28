@@ -14,8 +14,7 @@ public interface CustomerService {
     List<CustomerResponseDTO> getAllCustomers();
     boolean checkUsername(String username);
     CustomerResponseDTO login(String username, String password);
-
-
+    void updateByAdmin(int customerId, CustomerRequestDTO customerRequestDTO);
     void resetPassword(String username, String resetCode, String newPassword);
 
     void initPasswordReset(String username);

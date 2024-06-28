@@ -27,7 +27,7 @@ public class Product {
     @Column(nullable = false)
     private String img;
     @Column(nullable = false)
-    private double price;
+    private Integer price;
     @Column(nullable = false)
     private String detail;
     @ManyToOne
