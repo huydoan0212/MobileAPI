@@ -47,7 +47,7 @@ public class OrderController {
     }
 
     @GetMapping("/{status}")
-    public List<OrderResponseDTO> getOrderStatus(@PathVariable String status) {
+    public List<OrderResponseDTO> getOrderByStatus(@PathVariable String status) {
         return orderService.getOrdersByStatus(status);
     }
 }
