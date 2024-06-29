@@ -24,6 +24,6 @@ public interface OrderService {
 
     List<MonthlyRevenueResponse> getMonthlyRevenue();
 
-
+    List<OrderResponseDTO> getOrdersByStatus(String status);
 
 }

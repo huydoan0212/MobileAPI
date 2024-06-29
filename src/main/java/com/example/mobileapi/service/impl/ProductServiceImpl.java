@@ -55,6 +55,8 @@ public class ProductServiceImpl implements ProductService {
                             .name(product.getName())
                             .img(product.getImg())
                             .id(product.getId())
+                    .detail(product.getDetail())
+
                     .build());
         }
         return productResponseDTOS;
@@ -115,6 +117,7 @@ public class ProductServiceImpl implements ProductService {
                     .name(product.getName())
                     .img(product.getImg())
                     .id(product.getId())
+                    .detail(product.getDetail())
                     .build());
         }
         return productResponseDTOS;

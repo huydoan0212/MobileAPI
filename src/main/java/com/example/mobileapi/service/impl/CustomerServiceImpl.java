@@ -35,8 +35,8 @@ public class CustomerServiceImpl implements CustomerService {
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .build();
-        customerRepository.save(customer);
-        return customer.getId();
+        Integer id = customerRepository.save(customer).getId();
+        return id;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = getCustomerById(customerId);
         customer.setFullname(request.getFullname());
         customer.setUsername(request.getUsername());
-        customer.setPassword(request.getPassword());
+        customer.setPassword(hashPassword(request.getPassword()));
         customer.setEmail(request.getEmail());
         customer.setPhone(request.getPhone());
         customerRepository.save(customer);
@@ -97,7 +97,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDTO login(String username, String password) {
-        Customer customer = customerRepository.login(username, password);
+        Customer customer = customerRepository.login(username, hashPassword(password));
         return CustomerResponseDTO.builder()
                 .fullname(customer.getFullname())
                 .username(customer.getUsername())
@@ -113,7 +113,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponseDTO updateCustomerById(int customerId, CustomerUpdateRequestDTO request) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Khong tim thay customer"));
         customer.setFullname(request.getName());
-        customer.setPassword(request.getPassword());
+        customer.setPassword(hashPassword(request.getPassword()));
         customer.setEmail(request.getEmail());
         customer.setPhone(request.getPhone());
         customerRepository.save(customer);
@@ -171,6 +171,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new IllegalArgumentException("Không tìm thấy khách hàng với username: " + username);
         }
     }
+
     Customer getCustomerByName(String username) {
         return customerRepository.findByUsername(username);
     }
@@ -185,7 +186,8 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return sb.toString();
     }
-    private String hashPassword(String password) {
+
+    private static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedPassword = md.digest(password.getBytes());
@@ -201,5 +203,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     public Customer getCustomerById(int customerId) {
         return customerRepository.findById(customerId).orElse(null);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(CustomerServiceImpl.hashPassword("123456"));
     }
 }

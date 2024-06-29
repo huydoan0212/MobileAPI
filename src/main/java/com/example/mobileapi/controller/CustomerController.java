@@ -22,6 +22,7 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService customerService;
     private final CartService cartService;
+
     @PostMapping
     public int addCustomer(@RequestBody CustomerRequestDTO customer) {
         if (customerService.checkUsername(customer.getUsername())) {
@@ -43,6 +44,7 @@ public class CustomerController {
     public void updateAdmin(@PathVariable int customerId, @RequestBody CustomerRequestDTO customer) {
         customerService.updateByAdmin(customerId, customer);
     }
+
     @DeleteMapping("/{customerId}")
     public void deleteCustomer(@PathVariable int customerId) {
         customerService.deleteCustomer(customerId);

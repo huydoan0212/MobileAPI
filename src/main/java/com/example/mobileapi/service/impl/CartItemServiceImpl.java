@@ -19,6 +19,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
     private final CartServiceImpl cartServiceImpl;
     private final ProductServiceImpl productServiceImpl;
+
     @Override
     public int saveCartItem(CartItemRequestDTO cartItem) {
         int cartId = cartItem.getCartId();
@@ -69,17 +70,23 @@ public class CartItemServiceImpl implements CartItemService {
     public void updateCartItemQuantity(int cartItemId, int quantity) {
         CartItem cartI = getByCartId(cartItemId);
         cartI.setQuantity(cartI.getQuantity() + quantity);
-        if(cartI.getQuantity() <= 0) {
+        if (cartI.getQuantity() <= 0) {
             cartItemRepository.delete(cartI);
-        }else {
+        } else {
             cartItemRepository.save(cartI);
         }
 
     }
 
+    @Override
+    public void deleteCartItemByCartId(int cartId) {
+        cartItemRepository.deleteByCartId(cartId);
+    }
+
     public CartItem getByCartId(int cartItemId) {
         return cartItemRepository.findById(cartItemId).orElse(null);
     }
+
     public List<CartItemResponseDTO> getCartItemsByCartId(int cartId) {
         List<CartItem> cartItems = cartItemRepository.findByCartId(cartId);
         return cartItems.stream().map(cartItem -> CartItemResponseDTO.builder()

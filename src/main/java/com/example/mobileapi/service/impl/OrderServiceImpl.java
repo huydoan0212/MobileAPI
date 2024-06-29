@@ -41,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
                 .totalAmount(orderRequestDTO.getTotalAmount())
                 .address(orderRequestDTO.getAddress())
                 .numberPhone(orderRequestDTO.getNumberPhone())
+                .receiver(orderRequestDTO.getReceiver())
                 .status(orderRequestDTO.getStatus())
                 .orderDetails(orderRequestDTO.getOrderDetails().stream()
                         .map(this::convertToOrderDetailEntity)
@@ -125,6 +126,17 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return responseList;
+    }
+
+    @Override
+    public List<OrderResponseDTO> getOrdersByStatus(String status) {
+        List<Order> orders = orderRepository.findByStatus(status);
+        if (orders.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return orders.stream()
+                .map(this::convertToOrderResponseDTO)
+                .collect(Collectors.toList());
     }
 
 
