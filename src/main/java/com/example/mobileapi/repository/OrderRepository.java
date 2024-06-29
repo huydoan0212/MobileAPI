@@ -30,4 +30,5 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "    months.Month;", nativeQuery = true)
     List<Object[]> getMonthlyRevenue();
 
+    List<Order> findByStatus(String status);
 }

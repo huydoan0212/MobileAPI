@@ -3,6 +3,7 @@ package com.example.mobileapi.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
@@ -19,11 +20,11 @@ import java.util.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "id")
     Integer id;
 
-    @Column( name = "fullname")
+    @Column(nullable = false, name = "fullname")
     String fullname;
 
     @Column(nullable = false, name = "username")
@@ -62,9 +63,6 @@ public class Customer {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
-
-
-
 
 
 }

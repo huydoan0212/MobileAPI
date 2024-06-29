@@ -45,4 +45,9 @@ public class OrderController {
     public List<MonthlyRevenueResponse> getOrderRevenue() {
         return orderService.getMonthlyRevenue();
     }
+
+    @GetMapping("/{status}")
+    public List<OrderResponseDTO> getOrderStatus(@PathVariable String status) {
+        return orderService.getOrdersByStatus(status);
+    }
 }
