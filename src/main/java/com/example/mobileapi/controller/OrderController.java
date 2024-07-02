@@ -50,4 +50,14 @@ public class OrderController {
     public List<OrderResponseDTO> getOrderByStatus(@PathVariable String status) {
         return orderService.getOrdersByStatus(status);
     }
+
+    @PutMapping("/status/{status}&&{orderId}")
+    public void changeOrderStatus(@PathVariable("status") String status, @PathVariable("orderId") int orderId) {
+        orderService.changeOrderStatus(orderId, status);
+    }
+
+    @GetMapping("/client/{status}&&{customerId}")
+    public List<OrderResponseDTO> getOrderByStatusAndCustomerId(@PathVariable String status, @PathVariable int customerId) {
+        return orderService.getOrdersByStatusAndCustomerId(status, customerId);
+    }
 }

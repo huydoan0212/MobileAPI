@@ -140,6 +140,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    @Override
+    public void changeOrderStatus(int orderId, String status) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order != null) {
+            order.setStatus(status);
+        }
+        orderRepository.save(order);
+    }
+
+    @Override
+    public List<OrderResponseDTO> getOrdersByStatusAndCustomerId(String status, int customerId) {
+        List<Order> orderResponseDTO = orderRepository.findByStatusAndCustomerId(status, customerId);
+        if (orderResponseDTO.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return orderResponseDTO.stream()
+                .map(this::convertToOrderResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+
     public List<OrderResponseDTO> getOrdersByCustomerId(int customerId) {
         List<Order> orders = orderRepository.findByCustomerId(customerId);
         if (orders.isEmpty()) {

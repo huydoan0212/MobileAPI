@@ -1,6 +1,7 @@
 package com.example.mobileapi.repository;
 
 import com.example.mobileapi.dto.response.MonthlyRevenueResponse;
+import com.example.mobileapi.dto.response.OrderResponseDTO;
 import com.example.mobileapi.model.Cart;
 import com.example.mobileapi.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +32,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Object[]> getMonthlyRevenue();
 
     List<Order> findByStatus(String status);
+
+    List<Order> findByStatusAndCustomerId(String status, int customerId);
 }

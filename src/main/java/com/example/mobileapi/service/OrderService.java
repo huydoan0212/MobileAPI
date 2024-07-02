@@ -26,4 +26,7 @@ public interface OrderService {
 
     List<OrderResponseDTO> getOrdersByStatus(String status);
 
+    void changeOrderStatus(int orderId, String status);
+
+    List<OrderResponseDTO> getOrdersByStatusAndCustomerId(String status, int customerId);
 }

@@ -172,6 +172,11 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Override
+    public int getQuantityByCustomerId(int customerId) {
+        return customerRepository.getQuantityByCustomerId(customerId);
+    }
+
     Customer getCustomerByName(String username) {
         return customerRepository.findByUsername(username);
     }

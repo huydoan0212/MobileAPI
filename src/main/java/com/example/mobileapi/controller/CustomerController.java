@@ -23,6 +23,11 @@ public class CustomerController {
     private final CustomerService customerService;
     private final CartService cartService;
 
+    @GetMapping("/quantity/{customerId}")
+    public int getQuantity(@PathVariable("customerId") int customerId) {
+        return customerService.getQuantityByCustomerId(customerId);
+    }
+
     @PostMapping
     public int addCustomer(@RequestBody CustomerRequestDTO customer) {
         if (customerService.checkUsername(customer.getUsername())) {

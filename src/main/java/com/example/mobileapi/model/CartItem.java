@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class CartItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
     @ManyToOne

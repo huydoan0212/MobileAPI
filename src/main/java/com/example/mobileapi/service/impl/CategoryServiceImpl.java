@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+
     @Override
     public int saveCategory(CategoryRequestDTO category) {
         Category cate = Category.builder()
@@ -57,14 +59,20 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryResponseDTO> categoriesResponseDTO = new ArrayList<>();
         for (Category category : categories) {
             categoriesResponseDTO.add(CategoryResponseDTO.builder()
-                            .name(category.getName())
-                            .img(category.getImg())
-                            .id(category.getId())
+                    .name(category.getName())
+                    .img(category.getImg())
+                    .id(category.getId())
                     .build());
         }
         return categoriesResponseDTO;
     }
+
     public Category getById(int id) {
         return categoryRepository.findById(id).orElse(null);
+    }
+
+
+    public Category getByName(String name) {
+        return categoryRepository.findByName(name);
     }
 }

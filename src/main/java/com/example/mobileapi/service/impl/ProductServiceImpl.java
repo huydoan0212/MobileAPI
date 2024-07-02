@@ -2,6 +2,7 @@ package com.example.mobileapi.service.impl;
 
 import com.example.mobileapi.dto.request.ProductRequestDTO;
 import com.example.mobileapi.dto.response.ProductResponseDTO;
+import com.example.mobileapi.model.Category;
 import com.example.mobileapi.model.Product;
 import com.example.mobileapi.repository.ProductRepository;
 import com.example.mobileapi.service.ProductService;
@@ -19,20 +20,25 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryServiceImpl categoryService;
+
     @Override
     public int saveProduct(ProductRequestDTO productRequestDTO) {
         Product product = Product.builder()
                 .name(productRequestDTO.getName())
                 .price(productRequestDTO.getPrice())
                 .img(productRequestDTO.getImg())
-                .category(categoryService.getById(productRequestDTO.getCategoryId()))
+                .category(categoryService.getByName(productRequestDTO.getCategoryName()))
+                .detail(productRequestDTO.getDetail())
                 .build();
         return productRepository.save(product).getId();
     }
 
     @Override
-    public void updateProduct(int id,ProductRequestDTO productRequestDTO) {
+    public void updateProduct(int id, ProductRequestDTO productRequestDTO) {
         Product product = getById(id);
+        Category category = categoryService.getByName(productRequestDTO.getCategoryName());
+        product.setCategory(category);
+        product.setDetail(productRequestDTO.getDetail());
         product.setName(productRequestDTO.getName());
         product.setPrice(productRequestDTO.getPrice());
         product.setImg(productRequestDTO.getImg());
@@ -50,11 +56,11 @@ public class ProductServiceImpl implements ProductService {
         List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
         for (Product product : products) {
             productResponseDTOS.add(ProductResponseDTO.builder()
-                            .categoryName(product.getCategory().getName())
-                            .price(product.getPrice())
-                            .name(product.getName())
-                            .img(product.getImg())
-                            .id(product.getId())
+                    .categoryName(product.getCategory().getName())
+                    .price(product.getPrice())
+                    .name(product.getName())
+                    .img(product.getImg())
+                    .id(product.getId())
                     .detail(product.getDetail())
 
                     .build());
