@@ -5,8 +5,6 @@ import com.example.mobileapi.dto.response.UrlResponse;
 import com.example.mobileapi.service.ImageUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,10 +27,9 @@ public class ImageUploadServiceImpl implements ImageUploadService {
             Map<?, ?> result = cloudinary.uploader().upload(file.getBytes(), params);
             String cdnUrl = (String) result.get("secure_url");
 
-            UrlResponse response = UrlResponse.builder()
+            return UrlResponse.builder()
                     .url(cdnUrl)
                     .build();
-            return response;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

@@ -8,9 +8,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MonthlyRevenueResponse {
     int month;
-    int revenue;
+    long revenue;
 
-    public MonthlyRevenueResponse(int month, int revenue) {
+    public MonthlyRevenueResponse(int month, long revenue) {
         this.month = month;
         this.revenue = revenue;
     }
