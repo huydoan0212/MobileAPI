@@ -55,7 +55,7 @@ public class CartServiceImpl implements CartService {
     private CartItemResponseDTO convertToCartItemResponseDTO(CartItem cartItem) {
         return CartItemResponseDTO.builder()
                 .id(cartItem.getId())
-                .productResponseDTO(productServiceImpl.getProductById(cartItem.getProduct().getId()))
+                .product(productServiceImpl.getProductById(cartItem.getProduct().getId()))
                 .quantity(cartItem.getQuantity())
                 .build();
     }

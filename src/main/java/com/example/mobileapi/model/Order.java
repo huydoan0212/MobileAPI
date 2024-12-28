@@ -1,5 +1,6 @@
 package com.example.mobileapi.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,14 +23,19 @@ public class Order {
     private Integer id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
     private LocalDateTime orderDate;
+
     @Column(name = "total_amount", nullable = false)
     private Integer totalAmount; // Đảm bảo rằng tên trường này trùng khớp với tên trong cơ sở dữ liệu
 
     private String address;
+
     private String numberPhone;
+
     private String status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

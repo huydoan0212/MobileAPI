@@ -97,7 +97,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDTO login(String username, String password) {
-        Customer customer = customerRepository.login(username, hashPassword(password));
+        log.warn("Username: " + username + " Password: " + password);
+        Customer customer = customerRepository.login(username, hashPassword(password)).orElseThrow(()-> new RuntimeException("Customer not found"));
         return CustomerResponseDTO.builder()
                 .fullname(customer.getFullname())
                 .username(customer.getUsername())

@@ -2,6 +2,7 @@ package com.example.mobileapi.controller;
 
 import com.example.mobileapi.dto.response.UrlResponse;
 import com.example.mobileapi.service.ImageUploadService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/cloudinary")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true)
+@Tag(name = "ImageUpload", description = "Image Upload API")
 public class ImageUploadController {
     @Autowired
     ImageUploadService imageUploadService;

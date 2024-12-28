@@ -5,6 +5,7 @@ import com.example.mobileapi.dto.response.CategoryResponseDTO;
 import com.example.mobileapi.model.Category;
 import com.example.mobileapi.service.CategoryService;
 import com.example.mobileapi.service.impl.CategoryServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/category")
 @RequiredArgsConstructor
+@Tag(name = "Category", description = "Category API")
 public class CategoryController {
 
     private final CategoryService categoryService;

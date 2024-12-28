@@ -49,7 +49,7 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem cartItem = getByCartId(cartItemId);
         return CartItemResponseDTO.builder()
                 .id(cartItem.getId())
-                .productResponseDTO(productServiceImpl.getProductById(cartItem.getProduct().getId()))
+                .product(productServiceImpl.getProductById(cartItem.getProduct().getId()))
                 .quantity(cartItem.getQuantity())
                 .build();
     }
@@ -91,7 +91,7 @@ public class CartItemServiceImpl implements CartItemService {
         List<CartItem> cartItems = cartItemRepository.findByCartId(cartId);
         return cartItems.stream().map(cartItem -> CartItemResponseDTO.builder()
                 .id(cartItem.getId())
-                .productResponseDTO(productServiceImpl.getProductById(cartItem.getProduct().getId()))
+                .product(productServiceImpl.getProductById(cartItem.getProduct().getId()))
                 .quantity(cartItem.getQuantity())
                 .build()).collect(Collectors.toList());
     }

@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class CartItemResponseDTO {
     private int id;
-    private ProductResponseDTO productResponseDTO;
+    private ProductResponseDTO product;
     private int quantity;
 }

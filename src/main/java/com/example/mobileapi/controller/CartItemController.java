@@ -2,12 +2,14 @@ package com.example.mobileapi.controller;
 
 import com.example.mobileapi.dto.request.CartItemRequestDTO;
 import com.example.mobileapi.service.CartItemService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cartItem")
 @RequiredArgsConstructor
+@Tag(name = "CartItem", description = "CartItem API")
 public class CartItemController {
     private final CartItemService cartItemService;
 
@@ -17,7 +19,7 @@ public class CartItemController {
     }
 
     @PutMapping("/updatequantity/{cartItemId}")
-    public void updateCartItem(@PathVariable("cartItemId") int cartItemId, @RequestBody int quantity) {
+    public void updateCartItem(@PathVariable("cartItemId") int cartItemId, @RequestParam int quantity) {
         cartItemService.updateCartItemQuantity(cartItemId, quantity);
     }
 

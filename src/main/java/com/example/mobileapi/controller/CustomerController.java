@@ -10,8 +10,11 @@ import com.example.mobileapi.model.Customer;
 import com.example.mobileapi.service.CartService;
 import com.example.mobileapi.service.CustomerService;
 import com.example.mobileapi.service.impl.CustomerServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +22,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/customer")
 @RequiredArgsConstructor
+@Tag(name = "Customer", description = "Customer API")
 public class CustomerController {
+    private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
     private final CustomerService customerService;
     private final CartService cartService;
 

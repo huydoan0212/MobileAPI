@@ -1,5 +1,6 @@
 package com.example.mobileapi.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +17,8 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
     @Id
@@ -34,6 +36,7 @@ public class Customer {
     String email;
 
     @Column(nullable = false, name = "password")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
 
     @Column(nullable = false, name = "number_phone")

@@ -1,10 +1,9 @@
 package com.example.mobileapi.controller;
 
-import com.example.mobileapi.dto.request.OrderDetailRequestDTO;
 import com.example.mobileapi.dto.request.OrderDetailSaveRequest;
 import com.example.mobileapi.dto.response.OrderDetailResponseDTO;
 import com.example.mobileapi.service.OrderDetailService;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/order-detail")
 @RequiredArgsConstructor
+@Tag(name = "OrderDetail", description = "OrderDetail API")
 public class OrderDetailController {
     private final OrderDetailService orderDetailService;
 
