@@ -1,5 +1,6 @@
 package com.example.mobileapi.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 public class Address {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -30,7 +32,10 @@ public class Address {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonBackReference
     private Customer customer;
 
+    @Column(name = "is_default", nullable = false)
+    private boolean isDefault;
 
 }

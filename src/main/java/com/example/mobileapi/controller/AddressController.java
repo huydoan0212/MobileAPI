@@ -50,4 +50,14 @@ public class AddressController {
         addressService.deleteAddress(id);
     }
 
+    @PatchMapping("/default/{customerId}/{addressId}")
+    public boolean setDefaultAddress(@PathVariable Integer customerId, @PathVariable Integer addressId) {
+        return addressService.setDefaultAddress(customerId, addressId);
+    }
+
+    @GetMapping("/default/{customerId}")
+    public Address getAddressByCustomerIdAndIsDefault(@PathVariable Integer customerId) {
+        return addressService.getAddressByCustomerIdAndIsDefault(customerId);
+    }
+
 }

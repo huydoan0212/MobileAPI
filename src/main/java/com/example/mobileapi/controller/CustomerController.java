@@ -1,5 +1,6 @@
 package com.example.mobileapi.controller;
 
+import com.example.mobileapi.config.BCryptPasswordEncoder;
 import com.example.mobileapi.dto.request.CartRequestDTO;
 import com.example.mobileapi.dto.request.CustomerRequestDTO;
 import com.example.mobileapi.dto.request.CustomerUpdateRequestDTO;
@@ -27,6 +28,7 @@ public class CustomerController {
     private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
     private final CustomerService customerService;
     private final CartService cartService;
+    private final CustomerServiceImpl customerServiceImpl;
 
     @GetMapping("/quantity/{customerId}")
     public int getQuantity(@PathVariable("customerId") int customerId) {
@@ -101,5 +103,6 @@ public class CustomerController {
     public CustomerResponseDTO updateByUser(@PathVariable int id, @RequestBody CustomerUpdateRequestDTO customer) {
         return customerService.updateCustomerById(id, customer);
     }
+
 }
 

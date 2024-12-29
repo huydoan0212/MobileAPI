@@ -8,8 +8,10 @@ import com.example.mobileapi.repository.CustomerRepository;
 import com.example.mobileapi.service.AddressService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -31,6 +33,7 @@ public class AddressServiceImpl implements AddressService {
                 .receiver(dto.getReceiver())
                 .note(dto.getNote())
                 .customer(customerRepository.findById(dto.getCustomerId()).orElseThrow(() -> new EntityNotFoundException("Customer not found")))
+                .isDefault(false)
                 .build();
         return addressRepository.save(address);
     }
@@ -65,4 +68,29 @@ public class AddressServiceImpl implements AddressService {
     public List<Address> getAllAddress() {
         return addressRepository.findAll();
     }
+
+
+    @Override
+    @Transactional
+    public boolean setDefaultAddress(Integer customerId, Integer addressId) {
+        List<Address> addresses = addressRepository.findByCustomerId(customerId);
+        Optional<Address> targetAddressOpt = addresses.stream()
+                .filter(address -> address.getId().equals(addressId))
+                .findFirst();
+        if (!targetAddressOpt.isPresent()) {
+            return false;
+        }
+        addresses.forEach(address -> address.setDefault(false));
+        Address targetAddress = targetAddressOpt.get();
+        targetAddress.setDefault(true);
+        addressRepository.saveAll(addresses);
+        return true;
+    }
+
+    @Override
+    public Address getAddressByCustomerIdAndIsDefault(Integer customerId) {
+        return addressRepository.findByCustomerIdAndIsDefault(customerId);
+    }
+
+
 }

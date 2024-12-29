@@ -1,5 +1,6 @@
 package com.example.mobileapi.service.impl;
 
+import com.example.mobileapi.config.BCryptPasswordEncoder;
 import com.example.mobileapi.dto.request.CustomerRequestDTO;
 import com.example.mobileapi.dto.request.CustomerUpdateRequestDTO;
 import com.example.mobileapi.dto.response.CustomerResponseDTO;
@@ -7,31 +8,34 @@ import com.example.mobileapi.model.Customer;
 import com.example.mobileapi.repository.CustomerRepository;
 import com.example.mobileapi.service.CustomerService;
 import com.example.mobileapi.service.EmailService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final EmailService emailService;
+    private final BCryptPasswordEncoder passwordEncoder; // Đổi tên cho rõ ràng
+
+    public CustomerServiceImpl(CustomerRepository customerRepository, EmailService emailService, BCryptPasswordEncoder passwordEncoder) {
+        this.customerRepository = customerRepository;
+        this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public int saveCustomer(CustomerRequestDTO request) {
         Customer customer = Customer.builder()
                 .fullname(request.getFullname())
                 .username(request.getUsername())
-                .password(hashPassword(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword())) // Sử dụng passwordEncoder
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .build();
@@ -44,17 +48,15 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = getCustomerById(customerId);
         customer.setFullname(request.getFullname());
         customer.setUsername(request.getUsername());
-        customer.setPassword(hashPassword(request.getPassword()));
+        customer.setPassword(passwordEncoder.encode(request.getPassword())); // Sử dụng passwordEncoder
         customer.setEmail(request.getEmail());
         customer.setPhone(request.getPhone());
         customerRepository.save(customer);
     }
 
-
     @Override
     public void deleteCustomer(int customerId) {
         customerRepository.deleteById(customerId);
-
     }
 
     @Override
@@ -98,23 +100,27 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseDTO login(String username, String password) {
         log.warn("Username: " + username + " Password: " + password);
-        Customer customer = customerRepository.login(username, hashPassword(password)).orElseThrow(()-> new RuntimeException("Customer not found"));
-        return CustomerResponseDTO.builder()
-                .fullname(customer.getFullname())
-                .username(customer.getUsername())
-                .email(customer.getEmail())
-                .phone(customer.getPhone())
-                .id(customer.getId())
-                .role(customer.isRole())
-                .build();
-
+        Customer customer = customerRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
+        if (passwordEncoder.matches(password, customer.getPassword())) { // Sử dụng passwordEncoder
+            return CustomerResponseDTO.builder()
+                    .fullname(customer.getFullname())
+                    .username(customer.getUsername())
+                    .email(customer.getEmail())
+                    .phone(customer.getPhone())
+                    .id(customer.getId())
+                    .role(customer.isRole())
+                    .build();
+        } else {
+            throw new IllegalArgumentException("Sai mật khẩu");
+        }
     }
 
     @Override
     public CustomerResponseDTO updateCustomerById(int customerId, CustomerUpdateRequestDTO request) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Khong tim thay customer"));
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
         customer.setFullname(request.getName());
-        customer.setPassword(hashPassword(request.getPassword()));
+        customer.setPassword(passwordEncoder.encode(request.getPassword())); // Sử dụng passwordEncoder
         customer.setEmail(request.getEmail());
         customer.setPhone(request.getPhone());
         customerRepository.save(customer);
@@ -141,7 +147,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void resetPassword(String username, String resetCode, String newPassword) {
         Customer customer = getCustomerByName(username);
         if (customer != null && resetCode.equals(customer.getResetCode())) {
-            customer.setPassword(hashPassword(newPassword));
+            customer.setPassword(passwordEncoder.encode(newPassword)); // Sử dụng passwordEncoder
             customer.setResetCode(null); // Xóa mã reset sau khi đặt lại mật khẩu thành công
             customerRepository.save(customer);
             emailService.sendPasswordResetEmail(
@@ -156,7 +162,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void initPasswordReset(String username) {
-        Customer customer = customerRepository.findByUsername(username);
+        Customer customer = customerRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
         if (customer != null) {
             String resetCode = generateResetCode();
             customer.setResetCode(resetCode);
@@ -179,7 +185,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     Customer getCustomerByName(String username) {
-        return customerRepository.findByUsername(username);
+        return customerRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
     }
 
     private String generateResetCode() {
@@ -193,25 +199,7 @@ public class CustomerServiceImpl implements CustomerService {
         return sb.toString();
     }
 
-    private static String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedPassword = md.digest(password.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashedPassword) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error hashing password", e);
-        }
-    }
-
     public Customer getCustomerById(int customerId) {
         return customerRepository.findById(customerId).orElse(null);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(CustomerServiceImpl.hashPassword("123456"));
     }
 }
