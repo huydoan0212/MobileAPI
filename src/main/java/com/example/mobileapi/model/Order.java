@@ -36,6 +36,8 @@ public class Order {
 
     private String numberPhone;
 
+    private String paymentMethod;
+
     private String status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

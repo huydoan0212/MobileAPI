@@ -109,8 +109,8 @@ public class OrderServiceImpl implements OrderService {
             order.setNumberPhone(orderEditRequestDTO.getPhone());
             order.setStatus(orderEditRequestDTO.getStatus());
             order.setReceiver(orderEditRequestDTO.getFullname());
+            orderRepository.save(order);
         }
-        orderRepository.save(order);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.mobileapi.controller;
 
+import com.example.mobileapi.common.OrderMethod;
+import com.example.mobileapi.common.OrderStatus;
 import com.example.mobileapi.dto.request.OrderEditRequestDTO;
 import com.example.mobileapi.dto.request.OrderRequestDTO;
 import com.example.mobileapi.dto.response.MonthlyRevenueResponse;
@@ -19,7 +21,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public int saveOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+    public int saveOrder(@RequestParam OrderMethod method, @RequestParam OrderStatus status, @RequestBody OrderRequestDTO orderRequestDTO) {
+        orderRequestDTO.setStatus(status.getValue());
+        orderRequestDTO.setPaymentMethod(method.getValue());
         return orderService.saveOrder(orderRequestDTO);
     }
 
@@ -49,13 +53,13 @@ public class OrderController {
     }
 
     @GetMapping("/{status}")
-    public List<OrderResponseDTO> getOrderByStatus(@PathVariable String status) {
-        return orderService.getOrdersByStatus(status);
+    public List<OrderResponseDTO> getOrderByStatus(@PathVariable OrderStatus status) {
+        return orderService.getOrdersByStatus(status.getValue());
     }
 
     @PutMapping("/status/{status}&&{orderId}")
-    public void changeOrderStatus(@PathVariable("status") String status, @PathVariable("orderId") int orderId) {
-        orderService.changeOrderStatus(orderId, status);
+    public void changeOrderStatus(@PathVariable("status") OrderStatus status, @PathVariable("orderId") int orderId) {
+        orderService.changeOrderStatus(orderId, status.getValue());
     }
 
     @GetMapping("/client/{status}&&{customerId}")

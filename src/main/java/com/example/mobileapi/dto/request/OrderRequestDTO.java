@@ -1,5 +1,6 @@
 package com.example.mobileapi.dto.request;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,10 @@ public class OrderRequestDTO {
     private Integer totalAmount;
     private String address;
     private String numberPhone;
+    @Hidden
     private String status;
+    @Hidden
+    private String paymentMethod;
     private String receiver;
     private List<OrderDetailRequestDTO> orderDetails;
 }
