@@ -9,6 +9,8 @@ import com.example.mobileapi.dto.response.OrderResponseDTO;
 import com.example.mobileapi.service.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,8 +60,15 @@ public class OrderController {
     }
 
     @PutMapping("/status/{status}&&{orderId}")
-    public void changeOrderStatus(@PathVariable("status") OrderStatus status, @PathVariable("orderId") int orderId) {
-        orderService.changeOrderStatus(orderId, status.getValue());
+    public ResponseEntity<String> changeOrderStatus(@PathVariable("status") String status,
+                                                    @PathVariable("orderId") int orderId) {
+        try {
+            orderService.changeOrderStatus(orderId, status);
+            return ResponseEntity.ok("Cập nhật trạng thái thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi: " + e.getMessage());
+        }
     }
 
     @GetMapping("/client/{status}&&{customerId}")
