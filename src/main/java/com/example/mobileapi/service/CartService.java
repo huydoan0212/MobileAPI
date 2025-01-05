@@ -6,6 +6,10 @@ import com.example.mobileapi.model.Cart;
 
 public interface CartService {
     int saveCart(CartRequestDTO cartRequestDTO);
+
     CartResponseDTO getCart(int cartId);
+
     CartResponseDTO getCartByCustomerId(int id);
+
+    int getQuantityCartItemInCart(int cartId);
 }

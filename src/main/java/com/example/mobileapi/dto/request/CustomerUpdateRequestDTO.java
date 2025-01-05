@@ -8,5 +8,4 @@ public class CustomerUpdateRequestDTO {
     String name;
     String email;
     String phone;
-    String password;
 }

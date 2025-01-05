@@ -22,6 +22,7 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CustomerServiceImpl customerServiceImpl;
     private final ProductServiceImpl productServiceImpl;
+
     @Override
     public int saveCart(CartRequestDTO cartRequestDTO) {
         Cart cart = Cart.builder()
@@ -59,6 +60,7 @@ public class CartServiceImpl implements CartService {
                 .quantity(cartItem.getQuantity())
                 .build();
     }
+
     @Override
     public CartResponseDTO getCartByCustomerId(int customerId) {
         Cart cart = getByCustomerId(customerId);
@@ -76,9 +78,20 @@ public class CartServiceImpl implements CartService {
                 .cartItems(cartItemResponseDTOs)
                 .build();
     }
+
     public Cart getByCustomerId(int customerId) {
         return cartRepository.findByCustomerId(customerId).orElse(null);
     }
 
+    public int getQuantityCartItemInCart(int cartId) {
+        Cart cart = getByCartId(cartId);
+        if (cart == null) {
+            return 0;
+        }
+
+        return cart.getCartItems().stream()
+                .mapToInt(CartItem::getQuantity)
+                .sum();
+    }
 
 }

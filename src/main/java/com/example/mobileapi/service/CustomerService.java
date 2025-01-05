@@ -24,7 +24,6 @@ public interface CustomerService {
 
     CustomerResponseDTO updateCustomerById(int customerId, CustomerUpdateRequestDTO request);
 
-
     void updateByAdmin(int customerId, CustomerRequestDTO customerRequestDTO);
 
     void resetPassword(String username, String resetCode, String newPassword);
@@ -32,4 +31,6 @@ public interface CustomerService {
     void initPasswordReset(String username);
 
     int getQuantityByCustomerId(int customerId);
+
+    void changePassword(int customerId, String oldPassword, String newPassword);
 }

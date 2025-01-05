@@ -1,10 +1,7 @@
 package com.example.mobileapi.controller;
 
 import com.example.mobileapi.config.BCryptPasswordEncoder;
-import com.example.mobileapi.dto.request.CartRequestDTO;
-import com.example.mobileapi.dto.request.CustomerRequestDTO;
-import com.example.mobileapi.dto.request.CustomerUpdateRequestDTO;
-import com.example.mobileapi.dto.request.LoginRequest;
+import com.example.mobileapi.dto.request.*;
 import com.example.mobileapi.dto.response.CustomerResponseDTO;
 import com.example.mobileapi.dto.response.ResponseData;
 import com.example.mobileapi.model.Customer;
@@ -85,7 +82,6 @@ public class CustomerController {
     }
 
     @PostMapping("/resetPassword/{username}")
-
     public void resetPassword(
             @PathVariable String username,
             @RequestParam String resetCode,
@@ -102,6 +98,11 @@ public class CustomerController {
     @PutMapping("/updateByUser/{id}")
     public CustomerResponseDTO updateByUser(@PathVariable int id, @RequestBody CustomerUpdateRequestDTO customer) {
         return customerService.updateCustomerById(id, customer);
+    }
+
+    @PatchMapping("/changePassword/{customerId}")
+    public void changePassword(@PathVariable int customerId, @RequestBody ChangePasswordDto dto) {
+        customerService.changePassword(customerId, dto.getOldPassword(), dto.getNewPassword());
     }
 
 }

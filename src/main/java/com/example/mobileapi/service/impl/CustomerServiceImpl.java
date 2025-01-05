@@ -120,7 +120,6 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
         customer.setFullname(request.getName());
-        customer.setPassword(passwordEncoder.encode(request.getPassword())); // Sử dụng passwordEncoder
         customer.setEmail(request.getEmail());
         customer.setPhone(request.getPhone());
         customerRepository.save(customer);
@@ -182,6 +181,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public int getQuantityByCustomerId(int customerId) {
         return customerRepository.getQuantityByCustomerId(customerId);
+    }
+
+    @Override
+    public void changePassword(int customerId, String oldPassword, String newPassword) {
+        Customer customer = getCustomerById(customerId);
+        if (passwordEncoder.matches(oldPassword, customer.getPassword())) { // Sử dụng passwordEncoder
+            customer.setPassword(passwordEncoder.encode(newPassword)); // Sử dụng passwordEncoder
+            customerRepository.save(customer);
+        } else {
+            throw new IllegalArgumentException("Mật khẩu cũ không chính xác");
+        }
     }
 
     Customer getCustomerByName(String username) {

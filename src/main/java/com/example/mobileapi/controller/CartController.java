@@ -24,4 +24,9 @@ public class CartController {
         return cartService.getCartByCustomerId(customerId);
     }
 
+    @GetMapping("/quantity/{cartId}")
+    public int getCart(@PathVariable int cartId) {
+        return cartService.getQuantityCartItemInCart(cartId);
+    }
+
 }
