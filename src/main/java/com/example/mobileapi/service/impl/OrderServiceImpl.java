@@ -43,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
                 .numberPhone(orderRequestDTO.getNumberPhone())
                 .receiver(orderRequestDTO.getReceiver())
                 .status(orderRequestDTO.getStatus())
+                .paymentMethod(orderRequestDTO.getPaymentMethod())
                 .orderDetails(orderRequestDTO.getOrderDetails().stream()
                         .map(this::convertToOrderDetailEntity)
                         .collect(Collectors.toList()))

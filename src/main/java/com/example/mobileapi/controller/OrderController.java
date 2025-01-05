@@ -24,8 +24,8 @@ public class OrderController {
 
     @PostMapping
     public int saveOrder(@RequestParam OrderMethod method, @RequestParam OrderStatus status, @RequestBody OrderRequestDTO orderRequestDTO) {
-        orderRequestDTO.setStatus(status.getValue());
         orderRequestDTO.setPaymentMethod(method.getValue());
+        orderRequestDTO.setStatus(status.getValue());
         return orderService.saveOrder(orderRequestDTO);
     }
 
@@ -60,10 +60,10 @@ public class OrderController {
     }
 
     @PutMapping("/status/{status}&&{orderId}")
-    public ResponseEntity<String> changeOrderStatus(@PathVariable("status") String status,
+    public ResponseEntity<String> changeOrderStatus(@PathVariable("status") OrderStatus status,
                                                     @PathVariable("orderId") int orderId) {
         try {
-            orderService.changeOrderStatus(orderId, status);
+            orderService.changeOrderStatus(orderId, status.getValue());
             return ResponseEntity.ok("Cập nhật trạng thái thành công!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
